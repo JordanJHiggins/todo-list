@@ -1,3 +1,1 @@
-import "./style.css";
-
-console.log("bing");
+import './style.css';
