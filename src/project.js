@@ -15,11 +15,10 @@ export default class Project {
     this.tasks.splice(index, 1);
   }
 
-  updateTask(task, newTitle) {
-    const index = this.tasks.findIndex((obj) => obj.id === task.id);
-
-    console.log(index);
-
-    this.tasks[index].title = newTitle;
+  updateTask(taskId, data) {
+    Object.assign(
+      this.tasks.find((obj) => obj.id === taskId),
+      data
+    );
   }
 }
