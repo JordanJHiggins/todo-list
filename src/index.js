@@ -29,8 +29,12 @@ console.log(todoListOne);
 // UI Testing
 const newUi = new Ui();
 
-newUi.createProjectCard(project1.title);
-newUi.createProjectCard(project2.title);
+newUi.createDefaultPage();
+
+// newUi.createProjectCard(project1.title);
+// newUi.createProjectCard(project2.title);
+
+// newUi.createTaskCard(task1);
 
 // const myDate = document.getElementById('date');
 // myDate.addEventListener('change', () => {

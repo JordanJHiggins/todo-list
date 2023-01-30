@@ -12,15 +12,25 @@ export default class Ui {
   }
 
   createTaskCard(task) {
-    const projectCard = document.querySelector('.projectCard');
+    const projectCard = document.getElementsByClassName('project-card')[0];
     const taskCard = document.createElement('div');
 
-    taskCard.innerHTML = `<h5>${task}</h5>
-    <h5>${task}</h5>
-    <h5>${task}</h5>
-    <h5>${task}</h5>
+    taskCard.innerHTML = `<h5>${task.title}</h5>
+    <h5>${task.desc}</h5>
+    <h5>${task.dueDate}</h5>
+    <h5>${task.priority}</h5>
     `;
 
     projectCard.appendChild(taskCard);
+  }
+
+  createDefaultPage() {
+    const gridWrapper = document.getElementById('grid-wrapper');
+    const mainContent = document.createElement('div');
+    mainContent.id = 'main-content';
+    mainContent.innerHTML = `<h2 id="inbox-title">Inbox</h2>
+    <button class="task-button">Add task </button>`;
+
+    gridWrapper.appendChild(mainContent);
   }
 }
