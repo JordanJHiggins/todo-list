@@ -1,6 +1,7 @@
 import TodoList from './todoList';
 
 export default class Ui {
+  // Create Elements
   createProjectCard(project) {
     const mainContent = document.getElementById('main-content');
     const projectCard = document.createElement('div');
@@ -29,8 +30,22 @@ export default class Ui {
     const mainContent = document.createElement('div');
     mainContent.id = 'main-content';
     mainContent.innerHTML = `<h2 id="inbox-title">Inbox</h2>
-    <button class="task-button">Add task </button>`;
+    <button class="task-button">Add task </button>
+    <dialog class="modal"> <input type="text"></input></dialog> 
+    `;
 
     gridWrapper.appendChild(mainContent);
+  }
+
+  // Event Listeners
+
+  initTaskButton() {
+    const taskButton = document.querySelector('.task-button');
+    // separate opening modal to its own function?
+    taskButton.addEventListener('click', () => {
+      const modal = document.querySelector('.modal');
+      console.log('issamodal');
+      modal.showModal();
+    });
   }
 }
