@@ -10,7 +10,7 @@ html,
 body {
   min-height: 100vh;
 }
-/* page layout */
+
 #grid-wrapper {
   display: grid;
   grid-template-columns: 1fr 2.5fr;
@@ -19,12 +19,27 @@ body {
   min-width: 100vw;
 }
 
-/* main content */
 #main-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
   border: solid green 2px;
 }
 
-/* side bar */
+.project-card {
+  border: solid red 1px;
+  min-height: 20vh;
+  width: 50vw;
+  margin: 2rem;
+}
+
 #side-bar {
   border: solid blue 1px;
+}
+
+.modal {
+  margin: auto;
+}
+.modal::backdrop {
+  background: rgba(0, 0, 0, 0.5);
 }
