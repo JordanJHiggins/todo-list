@@ -1,4 +1,5 @@
 import TodoList from './todoList';
+import Task from './task';
 
 export default class Ui {
   // Create Elements
@@ -25,6 +26,8 @@ export default class Ui {
     projectCard.appendChild(taskCard);
   }
 
+  // Dont use modal? Just append input element to main content on click? Add css classes onclick for styling? taskInputPopUp()
+
   createDefaultPage() {
     const gridWrapper = document.getElementById('grid-wrapper');
     const mainContent = document.createElement('div');
@@ -32,7 +35,7 @@ export default class Ui {
     mainContent.innerHTML = `<h2 id="inbox-title">Inbox</h2>
     <button class="task-button">Add task </button>
     <dialog class="modal"> 
-    <form>
+    <form method="dialog" id="task-form">
     <label for="title">Title</label><br>
     <input type="text" id="title-input"><br>
     <label for="desc">Description</label><br>
@@ -42,6 +45,7 @@ export default class Ui {
     <label for="priority"> Priority</><br>
     <input type="radio" id="priority-input"><br>
     <button class="close-modal">Close Modal</button>
+    <button class="form-submit" type="submit">Submit</button>
     </form>
     </dialog> 
     `;
@@ -50,6 +54,23 @@ export default class Ui {
   }
 
   // Event Listeners
+  createNewTask(title) {
+    const newTask = new Task(title);
+
+    console.log(newTask);
+  }
+
+  getFormData() {
+    const taskForm = document.getElementById('task-form');
+
+    taskForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const taskTitle = document.getElementById('title-input').value;
+      this.createNewTask(taskTitle);
+      return taskTitle;
+    });
+  }
+
   initTaskButton() {
     const modal = document.querySelector('.modal');
     const taskButton = document.querySelector('.task-button');
