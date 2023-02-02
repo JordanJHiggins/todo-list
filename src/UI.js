@@ -1,16 +1,19 @@
 import TodoList from './todoList';
 import Task from './task';
+import Project from './project';
 
 export default class Ui {
   // Create Elements
-  createProjectCard(project) {
-    const mainContent = document.getElementById('main-content');
-    const projectCard = document.createElement('div');
-    projectCard.classList.add('project-card');
-    projectCard.innerHTML = `<h2>${project}</h2>
+  createProjectCard(projectArray) {
+    projectArray.projects.forEach((proj) => {
+      const mainContent = document.getElementById('main-content');
+      const projectCard = document.createElement('div');
+      projectCard.classList.add('project-card');
+      projectCard.innerHTML = `<h2>${proj.title}</h2>
     `;
 
-    mainContent.appendChild(projectCard);
+      mainContent.appendChild(projectCard);
+    });
   }
 
   createTaskCard(task) {
@@ -26,13 +29,11 @@ export default class Ui {
     projectCard.appendChild(taskCard);
   }
 
-  // Dont use modal? Just append input element to main content on click? Add css classes onclick for styling? taskInputPopUp()
-
-  createDefaultPage() {
+  createForm() {
     const gridWrapper = document.getElementById('grid-wrapper');
     const mainContent = document.createElement('div');
     mainContent.id = 'main-content';
-    mainContent.innerHTML = `<h2 id="inbox-title">Inbox</h2>
+    mainContent.innerHTML = `
     <button class="task-button">Add task </button>
     <dialog class="modal"> 
     <form method="dialog" id="task-form">
@@ -43,32 +44,40 @@ export default class Ui {
     <label for="due-date">Due Date</label><br>
     <input type="date id="date-input"><br>
     <label for="priority"> Priority</><br>
-    <input type="radio" id="priority-input"><br>
+    <input type="text" id="priority-input"><br>
     <button class="close-modal">Close Modal</button>
     <button class="form-submit" type="submit">Submit</button>
     </form>
     </dialog> 
     `;
-
     gridWrapper.appendChild(mainContent);
   }
 
-  // Event Listeners
-  createNewTask(title) {
-    const newTask = new Task(title);
-
-    console.log(newTask);
+  // Reaname loadHomePage(), create new project named Inbox in this function?
+  loadHome() {
+    const newTodoList = new TodoList();
+    const newInbox = new Project('Inbox');
+    newTodoList.addProject(newInbox);
+    this.createForm();
+    this.createProjectCard(newTodoList);
   }
 
-  getFormData() {
+  // Event Listeners
+
+  listenAddTask() {
     const taskForm = document.getElementById('task-form');
 
+    // need to get values after submisson
     taskForm.addEventListener('submit', (e) => {
       e.preventDefault();
       const taskTitle = document.getElementById('title-input').value;
-      this.createNewTask(taskTitle);
-      return taskTitle;
+      const taskDesc = document.getElementById('desc-input').value;
+      const taskDueDate = document.getElementById('date-input').value;
+      const taskPriority = document.getElementById('priority-input').value;
+      this.createNewTask(taskTitle, taskDesc, taskDueDate, taskPriority);
     });
+
+    this.createNewTask(taskTitle, taskDesc, taskDueDate, taskPriority);
   }
 
   initTaskButton() {
