@@ -4,16 +4,13 @@ import Project from './project';
 
 export default class Ui {
   // Create Elements
-  createProjectCard(projectArray) {
-    projectArray.projects.forEach((proj) => {
-      const mainContent = document.getElementById('main-content');
-      const projectCard = document.createElement('div');
-      projectCard.classList.add('project-card');
-      projectCard.innerHTML = `<h2>${proj.title}</h2>
-    `;
+  createProjectCard(project) {
+    const mainContent = document.getElementById('main-content');
+    const projectCard = document.createElement('div');
+    projectCard.classList.add('project-card');
+    projectCard.innerHTML = `<h2>${project.title}</h2>`;
 
-      mainContent.appendChild(projectCard);
-    });
+    mainContent.appendChild(projectCard);
   }
 
   createTaskCard(task) {
@@ -33,9 +30,9 @@ export default class Ui {
     const sideBar = document.getElementById('side-bar');
     sideBar.innerHTML = `<button class="project-button">Add Project</button>
     <dialog id="project-modal"> 
-    <form method="dialog" id="task-form">
+    <form method="dialog" id="project-form">
     <label for="title">Title</label><br>
-    <input type="text" id="title-input"><br>
+    <input type="text" id="project-title"><br>
     <button class="project-submit" type="submit">Submit</button>
     </form>
     </dialog>`;
@@ -68,15 +65,31 @@ export default class Ui {
   loadHome() {
     const newTodoList = new TodoList();
     const newInbox = new Project('Inbox');
-    const clean = new Project('Clean');
     newTodoList.addProject(newInbox);
-    newTodoList.addProject(clean);
     this.createTaskForm();
     this.createProjectForm();
     this.createProjectCard(newTodoList);
+    this.createNewProject(newTodoList);
   }
 
   // Event Listeners
+  createNewProject(todoList) {
+    const projectForm = document.getElementById('project-form');
+    let newProject = new Project();
+
+    projectForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const projectTitle = document.getElementById('project-title').value;
+
+      newProject = new Project(projectTitle);
+      this.createProjectCard(newProject);
+      todoList.addProject(newProject);
+
+      console.log(newProject);
+      console.log(todoList);
+    });
+  }
+
   listenAddTask() {
     const taskForm = document.getElementById('task-form');
     // need to get values after submisson
