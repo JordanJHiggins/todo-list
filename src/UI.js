@@ -29,13 +29,25 @@ export default class Ui {
     projectCard.appendChild(taskCard);
   }
 
-  createForm() {
+  createProjectForm() {
+    const sideBar = document.getElementById('side-bar');
+    sideBar.innerHTML = `<button class="project-button">Add Project</button>
+    <dialog id="project-modal"> 
+    <form method="dialog" id="task-form">
+    <label for="title">Title</label><br>
+    <input type="text" id="title-input"><br>
+    <button class="project-submit" type="submit">Submit</button>
+    </form>
+    </dialog>`;
+  }
+
+  createTaskForm() {
     const gridWrapper = document.getElementById('grid-wrapper');
     const mainContent = document.createElement('div');
     mainContent.id = 'main-content';
     mainContent.innerHTML = `
     <button class="task-button">Add task </button>
-    <dialog class="modal"> 
+    <dialog id="task-modal"> 
     <form method="dialog" id="task-form">
     <label for="title">Title</label><br>
     <input type="text" id="title-input"><br>
@@ -46,27 +58,27 @@ export default class Ui {
     <label for="priority"> Priority</><br>
     <input type="text" id="priority-input"><br>
     <button class="close-modal">Close Modal</button>
-    <button class="form-submit" type="submit">Submit</button>
+    <button class="task-submit" type="submit">Submit</button>
     </form>
     </dialog> 
     `;
     gridWrapper.appendChild(mainContent);
   }
 
-  // Reaname loadHomePage(), create new project named Inbox in this function?
   loadHome() {
     const newTodoList = new TodoList();
     const newInbox = new Project('Inbox');
+    const clean = new Project('Clean');
     newTodoList.addProject(newInbox);
-    this.createForm();
+    newTodoList.addProject(clean);
+    this.createTaskForm();
+    this.createProjectForm();
     this.createProjectCard(newTodoList);
   }
 
   // Event Listeners
-
   listenAddTask() {
     const taskForm = document.getElementById('task-form');
-
     // need to get values after submisson
     taskForm.addEventListener('submit', (e) => {
       e.preventDefault();
@@ -81,17 +93,30 @@ export default class Ui {
   }
 
   initTaskButton() {
-    const modal = document.querySelector('.modal');
+    const taskModal = document.querySelector('#task-modal');
     const taskButton = document.querySelector('.task-button');
     const closeModal = document.querySelector('.close-modal');
     // separate opening modal to its own function?
     taskButton.addEventListener('click', () => {
-      console.log('issamodal');
-      modal.showModal();
+      taskModal.showModal();
     });
 
     closeModal.addEventListener('click', () => {
-      modal.close();
+      taskModal.close();
+    });
+  }
+
+  initProjectButton() {
+    const projectModal = document.querySelector('#project-modal');
+    const projectButton = document.querySelector('.project-button');
+    const closeModal = document.querySelector('.close-modal');
+
+    projectButton.addEventListener('click', () => {
+      projectModal.showModal();
+    });
+
+    closeModal.addEventListener('click', () => {
+      projectModal.close();
     });
   }
 }
