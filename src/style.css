@@ -1,3 +1,4 @@
+/* Global styles */
 *,
 *::after,
 *::before {
@@ -11,6 +12,7 @@ body {
   min-height: 100vh;
 }
 
+/* Page structure */
 #grid-wrapper {
   display: grid;
   grid-template-columns: 1fr 2.5fr;
@@ -26,6 +28,7 @@ body {
   border: solid green 2px;
 }
 
+/* Project card */
 .project-card {
   border: solid red 1px;
   min-height: 20vh;
@@ -33,13 +36,24 @@ body {
   margin: 2rem;
 }
 
+/* Side bar  */
 #side-bar {
   border: solid blue 1px;
 }
 
-.modal {
+/* Modal */
+#task-modal,
+#project-modal {
+  padding: 2rem;
   margin: auto;
+  border: none;
+  border-radius: 7px;
 }
 .modal::backdrop {
   background: rgba(0, 0, 0, 0.5);
+}
+
+/* Task card */
+.task-card {
+  border: 1px forestgreen solid;
 }

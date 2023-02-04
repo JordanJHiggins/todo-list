@@ -1,3 +1,5 @@
+import Project from './project';
+
 export default class TodoList {
   constructor() {
     this.title = 'Todo List';
@@ -16,7 +18,7 @@ export default class TodoList {
 
   updateProject(projectId, data) {
     Object.assign(
-      this.projectss.find((obj) => obj.id === projectId),
+      this.projects.find((obj) => obj.id === projectId),
       data
     );
   }

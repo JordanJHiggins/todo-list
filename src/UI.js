@@ -3,9 +3,7 @@ import Task from './task';
 import Project from './project';
 
 export default class Ui {
-  // Create Elements
-
-  // creates HTML object from JS code.
+  // Helper functions
   elementFromHtml(html) {
     const template = document.createElement('template');
 
@@ -14,7 +12,8 @@ export default class Ui {
     return template.content.firstElementChild;
   }
 
-  createProjectCard(project) {
+  // Create Elements
+  projectCardTemplate(project) {
     const mainContent = document.getElementById('main-content');
     const projectCard = document.createElement('div');
     projectCard.classList.add('project-card');
@@ -32,8 +31,8 @@ export default class Ui {
     this.initTaskButton();
   }
 
-  createTaskCard(task, id) {
-    const projectCard = document.querySelector(`#${id}`);
+  taskCardTemplate(task, id) {
+    const projectCard = document.getElementById(`${id}`);
     const taskCard = document.createElement('div');
 
     taskCard.innerHTML = `
@@ -89,15 +88,9 @@ export default class Ui {
 
     newTodoList.addProject(newInbox);
     this.createProjectForm();
-
-    this.createProjectCard(newInbox);
-
+    this.projectCardTemplate(newInbox);
     this.createNewProject(newTodoList);
-    // this.createTaskForm();
-
-    // this.createNewTask();
     this.initProjectButton();
-    // this.initTaskButton();
   }
 
   // Event Listeners
@@ -109,7 +102,6 @@ export default class Ui {
     taskButton.forEach((button) =>
       button.addEventListener('click', (e) => {
         const buttonId = e.target.id;
-        console.log(buttonId);
         this.createNewTask(buttonId);
         taskModal.showModal();
       })
@@ -143,9 +135,9 @@ export default class Ui {
       const projectTitle = document.getElementById('project-title').value;
 
       newProject = new Project(projectTitle);
-      this.createProjectCard(newProject);
+      this.projectCardTemplate(newProject);
 
-      console.log(newProject);
+      todoList.addProject(newProject);
       console.log(todoList);
     });
   }
@@ -167,10 +159,7 @@ export default class Ui {
         taskDueDate.value,
         taskPriority.value
       );
-
-      this.createTaskCard(newTask, id);
-
-      // project.addTask(newTask);
+      this.taskCardTemplate(newTask, id);
     });
   }
 }
