@@ -17,14 +17,14 @@ export default class Ui {
   createProjectCard(project) {
     const mainContent = document.getElementById('main-content');
     const projectCard = document.createElement('div');
+    projectCard.classList.add('project-card');
+    projectCard.id = project.title;
 
     const projectCardContent = this.elementFromHtml(`
     <div>
       <h2>${project.title}</h2>
-      <button class="task-button">Add task</button>
+      <button class="task-button" id="${projectCard.id}">Add task</button>
     </div>`);
-
-    projectCard.classList.add('project-card');
 
     projectCard.appendChild(projectCardContent);
     mainContent.appendChild(projectCard);
@@ -32,15 +32,17 @@ export default class Ui {
     this.initTaskButton();
   }
 
-  createTaskCard(task) {
-    const projectCard = document.getElementsByClassName('project-card');
+  createTaskCard(task, id) {
+    const projectCard = document.querySelector(`#${id}`);
     const taskCard = document.createElement('div');
 
     taskCard.innerHTML = `
-    <h5>${task.title}</h5>
-    <h5>${task.desc}</h5>
-    <h5>${task.dueDate}</h5>
-    <h5>${task.priority}</h5>
+    <div class="task-card"
+      <h5>${task.title}</h5>
+      <h5>${task.desc}</h5>
+      <h5>${task.dueDate}</h5>
+      <h5>${task.priority}</h5>
+    <div/>
     `;
 
     projectCard.appendChild(taskCard);
@@ -69,7 +71,7 @@ export default class Ui {
     <label for="desc">Description</label><br>
     <input type="text" id="desc-input"><br>
     <label for="due-date">Due Date</label><br>
-    <input type="date id="date-input"><br>
+    <input type="date" id="date-input"><br>
     <label for="priority"> Priority</><br>
     <input type="text" id="priority-input"><br>
     <button class="close-modal">Close Modal</button>
@@ -87,13 +89,15 @@ export default class Ui {
 
     newTodoList.addProject(newInbox);
     this.createProjectForm();
+
     this.createProjectCard(newInbox);
 
     this.createNewProject(newTodoList);
-    this.createTaskForm();
+    // this.createTaskForm();
 
+    // this.createNewTask();
     this.initProjectButton();
-    this.initTaskButton();
+    // this.initTaskButton();
   }
 
   // Event Listeners
@@ -103,7 +107,10 @@ export default class Ui {
     const closeModal = document.querySelector('.close-modal');
     // separate opening modal to its own function?
     taskButton.forEach((button) =>
-      button.addEventListener('click', () => {
+      button.addEventListener('click', (e) => {
+        const buttonId = e.target.id;
+        console.log(buttonId);
+        this.createNewTask(buttonId);
         taskModal.showModal();
       })
     );
@@ -137,27 +144,32 @@ export default class Ui {
 
       newProject = new Project(projectTitle);
       this.createProjectCard(newProject);
-      todoList.addProject(newProject);
 
       console.log(newProject);
       console.log(todoList);
     });
   }
 
-  createNewTask() {
+  createNewTask(id) {
     const taskForm = document.getElementById('task-form');
     let newTask = new Task();
 
     taskForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      const taskTitle = document.getElementById('title-input').value;
-      const taskDesc = document.getElementById('desc-input').value;
-      const taskDueDate = document.getElementById('date-input').value;
-      const taskPriority = document.getElementById('priority-input').value;
+      const taskTitle = document.getElementById('title-input');
+      const taskDesc = document.getElementById('desc-input');
+      const taskDueDate = document.getElementById('date-input');
+      const taskPriority = document.getElementById('priority-input');
 
-      newTask = new Task(taskTitle, taskDesc, taskDueDate, taskPriority);
+      newTask = new Task(
+        taskTitle.value,
+        taskDesc.value,
+        taskDueDate.value,
+        taskPriority.value
+      );
 
-      this.createTaskCard(newTask);
+      this.createTaskCard(newTask, id);
+
       // project.addTask(newTask);
     });
   }
