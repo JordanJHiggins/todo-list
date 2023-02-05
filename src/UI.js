@@ -13,7 +13,8 @@ export default class Ui {
     <input type="text" id="project-title"><br>
     <button class="project-submit" type="submit">Submit</button>
     </form>
-    </dialog>`;
+    </dialog>
+    <div class="project-selectors"></div>`;
   }
 
   initProjectButton() {
@@ -56,6 +57,7 @@ export default class Ui {
 
       todoList.addProject(newProject);
       this.buildProject(newProject);
+      this.createProjectSelector(newProject);
       console.log(todoList);
     });
   }
@@ -151,5 +153,9 @@ export default class Ui {
     this.createNewTask();
   }
 
-  // Event Listeners
+  createProjectSelector(project) {
+    const selectorContainer = document.querySelector('.project-selectors');
+
+    selectorContainer.innerHTML = `<button id="selector">${project.getTitle()}</button>`;
+  }
 }
