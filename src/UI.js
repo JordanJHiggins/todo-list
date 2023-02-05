@@ -3,7 +3,7 @@ import Task from './task';
 import Project from './project';
 
 export default class Ui {
-  // Create Elements
+  // Create Project Elements
   createProjectForm() {
     const sideBar = document.getElementById('side-bar');
     sideBar.innerHTML = `<button class="project-button">Add Project</button>
@@ -38,7 +38,6 @@ export default class Ui {
     projectCardContent.innerHTML = `
     <div class="project-card">
       <h2>${project.getTitle()}</h2>
-      <button class="task-button">Add task</button>
     </div>`;
 
     projectCard.appendChild(projectCardContent);
@@ -61,62 +60,82 @@ export default class Ui {
     });
   }
 
-  // projectCardTemplate() {
-  //   // const mainContent = document.getElementById('main-content');
-  //   // const projectCard = document.createElement('div');
+  // Create task elements
+  createTaskForm() {
+    const gridWrapper = document.getElementById('grid-wrapper');
+    const mainContent = document.getElementById('main-content');
 
-  //   // const projectCardContent = this.elementFromHtml(`
-  //   // <div class="project-card">
-  //   //   <h2>test</h2>
-  //   //   <button class="task-button">Add task</button>
-  //   // </div>`);
+    mainContent.innerHTML = `
+    <dialog id="task-modal">
+    <form method="dialog" id="task-form">
+    <label for="title">Title</label><br>
+    <input type="text" id="title-input"><br>
+    <label for="desc">Description</label><br>
+    <input type="text" id="desc-input"><br>
+    <label for="due-date">Due Date</label><br>
+    <input type="date" id="date-input"><br>
+    <label for="priority"> Priority</><br>
+    <input type="text" id="priority-input"><br>
+    <button class="close-modal">Close Modal</button>
+    <button class="task-submit" type="submit">Submit</button>
+    </form>
+    </dialog>
+    <button class="task-button">Add Task</button>`;
 
-  //   // projectCard.appendChild(projectCardContent);
-  //   // mainContent.appendChild(projectCard);
-  //   // this.createTaskForm();
-  //   // this.initTaskButton();
-  // }
+    gridWrapper.appendChild(mainContent);
+  }
 
-  // taskCardTemplate(task, id) {
-  //   const projectCard = document.getElementById(`${id}`);
-  //   const taskCard = document.createElement('div');
+  initTaskButton() {
+    const taskModal = document.querySelector('#task-modal');
+    const taskButton = document.querySelector('.task-button');
+    const closeModal = document.querySelector('.task-submit');
+    // separate opening modal to its own function?
+    taskButton.addEventListener('click', () => {
+      taskModal.showModal();
+    });
 
-  //   taskCard.innerHTML = `
-  //   <div class="task-card"
-  //     <h5>${task.title}</h5>
-  //     <h5>${task.desc}</h5>
-  //     <h5>${task.dueDate}</h5>
-  //     <h5>${task.priority}</h5>
-  //   <div/>
-  //   `;
+    closeModal.addEventListener('click', () => {
+      taskModal.close();
+    });
+  }
 
-  //   projectCard.appendChild(taskCard);
-  // }
+  buildTaskCard(task) {
+    const projectCard = document.querySelector('.project-card');
+    const taskCard = document.createElement('div');
 
+    taskCard.innerHTML = `
+    <div class="task-card">
+      <h5>${task.getTitle()}</h5>
+      <h5>${task.getDesc()}</h5>
+      <h5>${task.getDueDate()}</h5>
+      <h5>${task.getPriority()}</h5>
+    <div/>
+    `;
+
+    projectCard.appendChild(taskCard);
+  }
+
+  createNewTask() {
+    const taskForm = document.getElementById('task-form');
+    let newTask = new Task();
+
+    taskForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const taskTitle = document.getElementById('title-input');
+      const taskDesc = document.getElementById('desc-input');
+      const taskDueDate = document.getElementById('date-input');
+      const taskPriority = document.getElementById('priority-input');
+
+      newTask = new Task(
+        taskTitle.value,
+        taskDesc.value,
+        taskDueDate.value,
+        taskPriority.value
+      );
+      this.buildTaskCard(newTask);
+    });
+  }
   // Creates HTML form and adds project button to side bar
-
-  // createTaskForm() {
-  //   const gridWrapper = document.getElementById('grid-wrapper');
-  //   const mainContent = document.getElementById('main-content');
-
-  //   const formContent = this.elementFromHtml(`<dialog id="task-modal">
-  //   <form method="dialog" id="task-form">
-  //   <label for="title">Title</label><br>
-  //   <input type="text" id="title-input"><br>
-  //   <label for="desc">Description</label><br>
-  //   <input type="text" id="desc-input"><br>
-  //   <label for="due-date">Due Date</label><br>
-  //   <input type="date" id="date-input"><br>
-  //   <label for="priority"> Priority</><br>
-  //   <input type="text" id="priority-input"><br>
-  //   <button class="close-modal">Close Modal</button>
-  //   <button class="task-submit" type="submit">Submit</button>
-  //   </form>
-  //   </dialog>`);
-
-  //   mainContent.appendChild(formContent);
-  //   gridWrapper.appendChild(mainContent);
-  // }
 
   loadHome() {
     const newTodoList = new TodoList();
@@ -126,44 +145,11 @@ export default class Ui {
     this.createProjectForm();
     this.initProjectButton();
     this.createNewProject(newTodoList);
+
+    this.createTaskForm();
+    this.initTaskButton();
+    this.createNewTask();
   }
 
   // Event Listeners
-  // initTaskButton() {
-  //   const taskModal = document.querySelector('#task-modal');
-  //   const taskButton = document.querySelectorAll('.task-button');
-  //   const closeModal = document.querySelector('.close-modal');
-  //   // separate opening modal to its own function?
-  //   taskButton.forEach((button) =>
-  //     button.addEventListener('click', (e) => {
-  //       const buttonId = e.target.id;
-  //       this.createNewTask(buttonId);
-  //       taskModal.showModal();
-  //     })
-  //   );
-
-  //   closeModal.addEventListener('click', () => {
-  //     taskModal.close();
-  //   });
-  // }
-
-  // createNewTask() {
-  //   const taskForm = document.getElementById('task-form');
-  //   let newTask = new Task();
-
-  //   taskForm.addEventListener('submit', (e) => {
-  //     e.preventDefault();
-  //     const taskTitle = document.getElementById('title-input');
-  //     const taskDesc = document.getElementById('desc-input');
-  //     const taskDueDate = document.getElementById('date-input');
-  //     const taskPriority = document.getElementById('priority-input');
-
-  //     newTask = new Task(
-  //       taskTitle.value,
-  //       taskDesc.value,
-  //       taskDueDate.value,
-  //       taskPriority.value
-  //     );
-  //     this.buildProject();
-  //   });
 }
