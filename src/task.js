@@ -6,8 +6,23 @@ export default class Task {
     this.id = crypto.randomUUID();
     this.title = title;
     this.desc = desc;
-    // input type of "date"
     this.dueDate = dueDate;
     this.priority = priority;
+  }
+
+  getTitle() {
+    return this.title;
+  }
+
+  getDesc() {
+    return this.desc;
+  }
+
+  getDueDate() {
+    return this.dueDate;
+  }
+
+  getPriority() {
+    return this.getPriority;
   }
 }
