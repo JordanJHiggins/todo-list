@@ -5,6 +5,18 @@ export default class Project {
     this.tasks = [];
   }
 
+  getTitle() {
+    return this.title;
+  }
+
+  getTasksList() {
+    return this.tasks;
+  }
+
+  getID() {
+    return this.id;
+  }
+
   addTask(task) {
     this.tasks.push(task);
   }

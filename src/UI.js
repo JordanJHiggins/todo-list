@@ -155,7 +155,8 @@ export default class Ui {
 
   createProjectSelector(project) {
     const selectorContainer = document.querySelector('.project-selectors');
-
-    selectorContainer.innerHTML = `<button id="selector">${project.getTitle()}</button>`;
+    selectorContainer.innerHTML += `<button id="selector" data-id="${project.getID()}">${project.getTitle()}</button>`;
   }
+
+  getProject() {}
 }
