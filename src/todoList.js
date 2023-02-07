@@ -6,6 +6,10 @@ export default class TodoList {
     this.projects = [];
   }
 
+  getTodoList() {
+    return this.projects;
+  }
+
   addProject(project) {
     this.projects.push(project);
   }
@@ -14,6 +18,12 @@ export default class TodoList {
     const index = this.projects.indexOf(project);
 
     this.projects.splice(index, 1);
+  }
+
+  findProject(projectId) {
+    const foundObject = this.projects.find((obj) => obj.id === projectId);
+    console.log(foundObject);
+    return foundObject;
   }
 
   updateProject(projectId, data) {

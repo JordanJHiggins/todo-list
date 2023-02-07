@@ -57,7 +57,7 @@ export default class Ui {
 
       todoList.addProject(newProject);
       this.buildProject(newProject);
-      this.createProjectSelector(newProject);
+      this.createProjectSelector(newProject, todoList);
       console.log(todoList);
     });
   }
@@ -153,10 +153,18 @@ export default class Ui {
     this.createNewTask();
   }
 
-  createProjectSelector(project) {
+  // Sets ID of project on corresponding selector button, passes ID to findProject method.
+  createProjectSelector(project, todoList) {
     const selectorContainer = document.querySelector('.project-selectors');
-    selectorContainer.innerHTML += `<button id="selector" data-id="${project.getID()}">${project.getTitle()}</button>`;
-  }
+    selectorContainer.innerHTML += `<button class="selector" data-id="${project.getID()}">${project.getTitle()}</button>`;
 
-  getProject() {}
+    const selectorButton = document.querySelectorAll('.selector');
+    selectorButton.forEach((button) =>
+      button.addEventListener('click', (e) => {
+        const buttonID = e.target.dataset.id;
+
+        todoList.findProject(buttonID);
+      })
+    );
+  }
 }
