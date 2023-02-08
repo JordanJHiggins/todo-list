@@ -37,7 +37,7 @@ export default class Ui {
     const projectCardContent = document.createElement('div');
 
     projectCardContent.innerHTML = `
-    <div class="project-card">
+    <div class="project-card ${project.getID()}">
       <h2>${project.getTitle()}</h2>
     </div>`;
 
@@ -101,7 +101,7 @@ export default class Ui {
     });
   }
 
-  buildTaskCard(task) {
+  buildTaskCard(task, todoList) {
     const projectCard = document.querySelector('.project-card');
     const taskCard = document.createElement('div');
 
@@ -117,7 +117,7 @@ export default class Ui {
     projectCard.appendChild(taskCard);
   }
 
-  createNewTask() {
+  createNewTask(todoList) {
     const taskForm = document.getElementById('task-form');
     let newTask = new Task();
 
@@ -134,10 +134,9 @@ export default class Ui {
         taskDueDate.value,
         taskPriority.value
       );
-      this.buildTaskCard(newTask);
+      this.buildTaskCard(newTask, todoList);
     });
   }
-  // Creates HTML form and adds project button to side bar
 
   loadHome() {
     const newTodoList = new TodoList();
@@ -150,7 +149,7 @@ export default class Ui {
 
     this.createTaskForm();
     this.initTaskButton();
-    this.createNewTask();
+    this.createNewTask(newTodoList);
   }
 
   // Sets ID of project on corresponding selector button, passes ID to findProject method.
@@ -163,8 +162,17 @@ export default class Ui {
       button.addEventListener('click', (e) => {
         const buttonID = e.target.dataset.id;
 
-        todoList.findProject(buttonID);
+        const foundProject = todoList.findProject(buttonID);
+
+        // console.log(foundProject);
+
+        this.setProjectStatus(foundProject.id);
       })
     );
+  }
+
+  setProjectStatus(foundProject) {
+    const activeProject = document.querySelector(`.${foundProject}`);
+    activeProject.classList.add('active');
   }
 }
