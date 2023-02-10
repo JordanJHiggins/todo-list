@@ -102,7 +102,7 @@ export default class Ui {
   }
 
   buildTaskCard(task) {
-    const projectCard = document.querySelector('.active');
+    const projectCard = document.querySelector('.active ');
     const taskCard = document.createElement('div');
 
     taskCard.innerHTML = `
@@ -135,7 +135,7 @@ export default class Ui {
       );
 
       const activeProj = todoList.getActiveProject();
-      console.log(activeProj);
+      // console.log(activeProj);
 
       activeProj.addTask(newTask);
       // this.checkForActiveProject();
@@ -166,12 +166,12 @@ export default class Ui {
     selectorButton.forEach((button) =>
       button.addEventListener('click', (e) => {
         const buttonID = e.target.dataset.id;
-
         const foundProject = todoList.findProject(buttonID);
+        this.removeProjectStatus();
+        console.log(foundProject);
 
-        // console.log(foundProject);
-
-        todoList.setActiveProject(project);
+        todoList.setActiveProject(foundProject);
+        console.log(todoList);
         this.setProjectStatus(foundProject.id);
       })
     );
@@ -183,16 +183,13 @@ export default class Ui {
     activeProject.classList.add('active');
   }
 
-  // Check for a project with active status?
-  checkForActiveProject() {
+  removeProjectStatus() {
     const projectCards = document.querySelectorAll('.project-card');
 
     const projectCardsArray = [...projectCards];
 
-    if (
-      projectCardsArray.forEach((proj) => proj.classList.contains('active'))
-    ) {
-      console.log('yaaaa');
-    }
+    projectCardsArray.forEach((projCard) =>
+      projCard.classList.remove('active')
+    );
   }
 }
