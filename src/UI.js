@@ -1,6 +1,7 @@
 import TodoList from './todoList';
 import Task from './task';
 import Project from './project';
+import { formatRFC3339WithOptions } from 'date-fns/fp';
 
 export default class Ui {
   // Create Project Elements
@@ -104,16 +105,30 @@ export default class Ui {
   buildTaskCard(task) {
     const projectCard = document.querySelector('.active ');
     const taskCard = document.createElement('div');
+    taskCard.classList.add('task-card');
 
     taskCard.innerHTML = `
-    <div class="task-card">
+   
       <h5>${task.getTitle()}</h5>
       <h5>${task.getDesc()}</h5>
       <h5>${task.getDueDate()}</h5>
       <h5>${task.getPriority()}</h5>
-    <div/>
+      <button class="remove-button">Remove</button>
+  
     `;
     projectCard.appendChild(taskCard);
+    this.removeTaskCard();
+  }
+
+  removeTaskCard() {
+    const removeButton = document.querySelectorAll('.remove-button');
+
+    removeButton.forEach((button) =>
+      button.addEventListener('click', (e) => {
+        console.log('bingggg');
+        e.target.parentNode.remove();
+      })
+    );
   }
 
   createNewTask(todoList) {
@@ -138,7 +153,6 @@ export default class Ui {
       // console.log(activeProj);
 
       activeProj.addTask(newTask);
-      // this.checkForActiveProject();
       this.buildTaskCard(newTask, todoList);
     });
   }
