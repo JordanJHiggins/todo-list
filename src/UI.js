@@ -37,7 +37,7 @@ export default class Ui {
     const projectCardContent = document.createElement('div');
 
     projectCardContent.innerHTML = `
-    <div class="project-card ${project.getID()}">
+    <div class="project-card" id="${project.getID()}">
       <h2>${project.getTitle()}</h2>
     </div>`;
 
@@ -101,8 +101,8 @@ export default class Ui {
     });
   }
 
-  buildTaskCard(task, todoList) {
-    const projectCard = document.querySelector('.project-card');
+  buildTaskCard(task) {
+    const projectCard = document.querySelector('.active');
     const taskCard = document.createElement('div');
 
     taskCard.innerHTML = `
@@ -113,7 +113,6 @@ export default class Ui {
       <h5>${task.getPriority()}</h5>
     <div/>
     `;
-
     projectCard.appendChild(taskCard);
   }
 
@@ -134,6 +133,12 @@ export default class Ui {
         taskDueDate.value,
         taskPriority.value
       );
+
+      const activeProj = todoList.getActiveProject();
+      console.log(activeProj);
+
+      activeProj.addTask(newTask);
+      // this.checkForActiveProject();
       this.buildTaskCard(newTask, todoList);
     });
   }
@@ -166,13 +171,28 @@ export default class Ui {
 
         // console.log(foundProject);
 
+        todoList.setActiveProject(project);
         this.setProjectStatus(foundProject.id);
       })
     );
   }
 
   setProjectStatus(foundProject) {
-    const activeProject = document.querySelector(`.${foundProject}`);
+    const activeProject = document.getElementById(`${foundProject}`);
+
     activeProject.classList.add('active');
+  }
+
+  // Check for a project with active status?
+  checkForActiveProject() {
+    const projectCards = document.querySelectorAll('.project-card');
+
+    const projectCardsArray = [...projectCards];
+
+    if (
+      projectCardsArray.forEach((proj) => proj.classList.contains('active'))
+    ) {
+      console.log('yaaaa');
+    }
   }
 }
