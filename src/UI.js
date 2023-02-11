@@ -31,18 +31,23 @@ export default class Ui {
     });
   }
 
-  buildProject(project) {
-    const mainContent = document.getElementById('main-content');
+  buildProject(project, todoList) {
     const projectCard = document.createElement('div');
-    const projectCardContent = document.createElement('div');
+    projectCard.classList.add('project-card');
+    projectCard.id = `${project.getID()}`;
 
-    projectCardContent.innerHTML = `
-    <div class="project-card" id="${project.getID()}">
+    projectCard.innerHTML = `
       <h2>${project.getTitle()}</h2>
-    </div>`;
+     `;
 
-    projectCard.appendChild(projectCardContent);
-    mainContent.appendChild(projectCard);
+    this.createProjectSelector(project, todoList);
+    this.projectViewHandler(projectCard);
+  }
+
+  clearProjectView(content) {
+    while (content.hasChildNodes()) {
+      content.removeChild(content.firstChild);
+    }
   }
 
   createNewProject(todoList) {
@@ -56,9 +61,23 @@ export default class Ui {
       newProject = new Project(projectTitle.value);
 
       todoList.addProject(newProject);
-      this.buildProject(newProject);
-      this.createProjectSelector(newProject, todoList);
+
+      this.buildProject(newProject, todoList);
+
+      // this.createProjectSelector(newProject, todoList);
     });
+  }
+
+  projectViewHandler(projectCard) {
+    const selectorButton = document.querySelectorAll('.selector');
+
+    selectorButton.forEach((button) =>
+      button.addEventListener('click', () => {
+        const mainContent = document.getElementById('main-content');
+        this.clearProjectView(mainContent);
+        mainContent.appendChild(projectCard);
+      })
+    );
   }
 
   // Create task elements
