@@ -1,13 +1,12 @@
 import TodoList from './todoList';
 import Task from './task';
 import Project from './project';
-import { formatRFC3339WithOptions } from 'date-fns/fp';
 
 export default class Ui {
-  // Create Project Elements
   createProjectForm() {
     const sideBar = document.getElementById('side-bar');
-    sideBar.innerHTML = `<button class="project-button">Add Project</button>
+    sideBar.innerHTML = `
+    <button class="project-button">Add Project</button>
     <dialog id="project-modal"> 
     <form method="dialog" id="project-form">
     <label for="title">Title</label><br>
@@ -59,7 +58,6 @@ export default class Ui {
       todoList.addProject(newProject);
       this.buildProject(newProject);
       this.createProjectSelector(newProject, todoList);
-      console.log(todoList);
     });
   }
 
@@ -92,7 +90,7 @@ export default class Ui {
     const taskModal = document.querySelector('#task-modal');
     const taskButton = document.querySelector('.task-button');
     const closeModal = document.querySelector('.task-submit');
-    // separate opening modal to its own function?
+
     taskButton.addEventListener('click', () => {
       taskModal.showModal();
     });
@@ -102,30 +100,32 @@ export default class Ui {
     });
   }
 
-  buildTaskCard(task) {
+  buildTaskCard(task, project) {
     const projectCard = document.querySelector('.active ');
     const taskCard = document.createElement('div');
     taskCard.classList.add('task-card');
 
     taskCard.innerHTML = `
-   
       <h5>${task.getTitle()}</h5>
       <h5>${task.getDesc()}</h5>
       <h5>${task.getDueDate()}</h5>
       <h5>${task.getPriority()}</h5>
-      <button class="remove-button">Remove</button>
+      <button class="remove-button"  data-id="${task.getID()}">Remove</button>
   
     `;
     projectCard.appendChild(taskCard);
-    this.removeTaskCard();
+    this.removeTaskCard(task, project);
   }
 
-  removeTaskCard() {
+  removeTaskCard(task, project) {
     const removeButton = document.querySelectorAll('.remove-button');
 
     removeButton.forEach((button) =>
       button.addEventListener('click', (e) => {
-        console.log('bingggg');
+        const taskID = e.target.dataset.id;
+        const foundTask = project.findTask(taskID);
+
+        project.removeTask(foundTask);
         e.target.parentNode.remove();
       })
     );
@@ -137,6 +137,7 @@ export default class Ui {
 
     taskForm.addEventListener('submit', (e) => {
       e.preventDefault();
+
       const taskTitle = document.getElementById('title-input');
       const taskDesc = document.getElementById('desc-input');
       const taskDueDate = document.getElementById('date-input');
@@ -150,18 +151,16 @@ export default class Ui {
       );
 
       const activeProj = todoList.getActiveProject();
-      // console.log(activeProj);
 
       activeProj.addTask(newTask);
-      this.buildTaskCard(newTask, todoList);
+      this.buildTaskCard(newTask, activeProj);
     });
   }
 
   loadHome() {
+    // Create main todolist, all proj stored here.
     const newTodoList = new TodoList();
-    const newInbox = new Project('Inbox');
 
-    newTodoList.addProject(newInbox);
     this.createProjectForm();
     this.initProjectButton();
     this.createNewProject(newTodoList);
@@ -181,11 +180,9 @@ export default class Ui {
       button.addEventListener('click', (e) => {
         const buttonID = e.target.dataset.id;
         const foundProject = todoList.findProject(buttonID);
-        this.removeProjectStatus();
-        console.log(foundProject);
 
         todoList.setActiveProject(foundProject);
-        console.log(todoList);
+        this.removeProjectStatus();
         this.setProjectStatus(foundProject.id);
       })
     );
@@ -193,13 +190,11 @@ export default class Ui {
 
   setProjectStatus(foundProject) {
     const activeProject = document.getElementById(`${foundProject}`);
-
     activeProject.classList.add('active');
   }
 
   removeProjectStatus() {
     const projectCards = document.querySelectorAll('.project-card');
-
     const projectCardsArray = [...projectCards];
 
     projectCardsArray.forEach((projCard) =>
