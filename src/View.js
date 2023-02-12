@@ -1,6 +1,8 @@
 import TodoList from './todoList';
 import Task from './task';
 import Project from './project';
+import Controller from './controller';
+import { app } from './index';
 import { isThisQuarter } from 'date-fns';
 
 export default class View {
@@ -37,6 +39,7 @@ export default class View {
     this.root.append(this.sideBar, this.mainContent);
   }
 
+  // Helpers --------------------------------------------
   createElement(tag, className) {
     const element = document.createElement(tag);
     if (className) element.classList.add(className);
@@ -51,7 +54,7 @@ export default class View {
   }
 
   getProjectTitleValue() {
-    return this.addProjectInput.value;
+    return this.addProjectInput;
   }
 
   clearProjectInput() {
@@ -60,7 +63,6 @@ export default class View {
 
   showAddProjectModal() {
     const addProjectModal = document.querySelector('.add-project-modal');
-    console.log('bongbogog');
     if (addProjectModal.style.display === 'none') {
       addProjectModal.style.display = 'block';
     } else {
@@ -68,11 +70,29 @@ export default class View {
     }
   }
 
-  // Event listeners
+  // Talk to controller ------------------------------
+  submitNewProject() {
+    const projectTitle = document.querySelector('.add-project-input').value;
+
+    console.log(projectTitle);
+
+    app.handleAddProject(projectTitle);
+  }
+
+  // Render elements ---------------------------------------
+  renderNewProject(title) {}
+
+  // Event listeners -----------------------------------
   initAddProjectButton() {
     const addProjectButton = document.querySelector('.add-project-button');
 
     addProjectButton.addEventListener('click', this.showAddProjectModal);
+  }
+
+  initSubmitProjectButton() {
+    const submitProjectButton = document.querySelector('.project-submit');
+
+    submitProjectButton.addEventListener('click', this.submitNewProject);
   }
 
   // OLD METHODS ---------------------------------------------------

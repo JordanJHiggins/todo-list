@@ -1,18 +1,21 @@
 import Project from './project';
 import Task from './task';
 import TodoList from './todoList';
-import Ui from './UI';
+import View from './View';
+import Controller from './controller';
 import './style.css';
+
+export const app = new Controller(new View(), new TodoList());
 
 window.addEventListener('DOMContentLoaded', (event) => {
   console.log('DOM fully loaded and parsed');
 
-  // data format for updating task.
-  // const data = { title: 'bingbong', priority: 'extreme!!' };
+  // App is instance of Controller, takes in view and models
 
-  // UI Testing
-  const newUi = new Ui();
-
-  // load inbox
-  newUi.loadHome();
+  // LOGIC TESTING
+  app.view.initAddProjectButton();
+  app.view.initSubmitProjectButton();
 });
+
+// data format for updating task.
+// const data = { title: 'bingbong', priority: 'extreme!!' };
