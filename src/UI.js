@@ -3,11 +3,21 @@ import Task from './task';
 import Project from './project';
 
 export default class Ui {
-  createProjectForm() {
-    const sideBar = document.getElementById('side-bar');
-    sideBar.innerHTML = `
+  constructor() {
+    // Root element, grid container
+    this.main = this.getElement('#grid-wrapper');
+
+    this.title = this.createElement('h1');
+    this.title.textContent = 'todoooo';
+
+    // Main content area, projects displayed here
+    this.mainContent = this.createElement('div', 'main-content');
+
+    // Side bar, project list displayed here
+    this.sideBar = this.createElement('div', 'side-bar');
+    this.sideBar.innerHTML = `
     <button class="project-button">Add Project</button>
-    <dialog id="project-modal"> 
+    <dialog id="project-modal">
     <form method="dialog" id="project-form">
     <label for="title">Title</label><br>
     <input type="text" id="project-title"><br>
@@ -15,10 +25,40 @@ export default class Ui {
     </form>
     </dialog>
     <div class="project-selectors"></div>`;
+
+    this.main.append(this.sideBar);
   }
 
+  createElement(tag, className) {
+    const element = document.createElement(tag);
+    if (className) element.classList.add(className);
+
+    return element;
+  }
+
+  getElement(selector) {
+    const element = document.querySelector(selector);
+
+    return element;
+  }
+
+  // createProjectForm() {
+  //   const sideBar = document.getElementById('side-bar');
+  //   sideBar.innerHTML = `
+  //   <button class="project-button">Add Project</button>
+  //   <dialog id="project-modal">
+  //   <form method="dialog" id="project-form">
+  //   <label for="title">Title</label><br>
+  //   <input type="text" id="project-title"><br>
+  //   <button class="project-submit" type="submit">Submit</button>
+  //   </form>
+  //   </dialog>
+  //   <div class="project-selectors"></div>`;
+  // }
+
+  // Initialize modal buttons
   initProjectButton() {
-    const projectModal = document.querySelector('#project-modal');
+    const projectModal = document.querySelector('.project-modal');
     const projectButton = document.querySelector('.project-button');
     const closeModal = document.querySelector('.project-submit');
 
@@ -61,7 +101,8 @@ export default class Ui {
       newProject = new Project(projectTitle.value);
 
       todoList.addProject(newProject);
-
+      const activeProj = todoList.getActiveProject();
+      // Should be building the active project?
       this.buildProject(newProject, todoList);
 
       // this.createProjectSelector(newProject, todoList);
