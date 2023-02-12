@@ -1,6 +1,7 @@
 import TodoList from './todoList';
 import Task from './task';
 import Project from './project';
+import { isThisQuarter } from 'date-fns';
 
 export default class View {
   constructor() {
@@ -16,15 +17,22 @@ export default class View {
     // Side bar, project list displayed here
     this.sideBar = this.createElement('div', 'side-bar');
 
+    this.addProjectModal = this.createElement('div', 'add-project-modal');
+
     // Add project button and input, located in sidebar
     this.addProjectButton = this.createElement('button', 'add-project-button');
     this.addProjectButton.textContent = 'Add Project ';
 
     this.addProjectInput = this.createElement('input', 'add-project-input');
 
-    // Append project input and buttons to sidebar
-    this.sideBar.append(this.addProjectInput, this.addProjectButton);
+    this.projectSubmit = this.createElement('button', 'project-submit');
+    this.projectSubmit.type = 'submit';
+    this.projectSubmit.textContent = 'Add';
 
+    // Append project input and buttons to sidebar
+    this.addProjectModal.append(this.addProjectInput, this.projectSubmit);
+
+    this.sideBar.append(this.addProjectButton, this.addProjectModal);
     // Append sidebar and main content to grid-wrapper
     this.root.append(this.sideBar, this.mainContent);
   }
@@ -42,30 +50,32 @@ export default class View {
     return element;
   }
 
-  getProjectTitle() {
+  getProjectTitleValue() {
     return this.addProjectInput.value;
   }
 
   clearProjectInput() {
-    this.addProjectInpt = '';
+    this.addProjectInput = '';
+  }
+
+  showAddProjectModal() {
+    const addProjectModal = document.querySelector('.add-project-modal');
+    console.log('bongbogog');
+    if (addProjectModal.style.display === 'none') {
+      addProjectModal.style.display = 'block';
+    } else {
+      addProjectModal.style.display = 'none';
+    }
   }
 
   // Event listeners
+  initAddProjectButton() {
+    const addProjectButton = document.querySelector('.add-project-button');
 
-  initProjectButton() {
-    const projectModal = document.querySelector('.project-modal');
-    const projectButton = document.querySelector('.project-button');
-    const closeModal = document.querySelector('.project-submit');
-
-    projectButton.addEventListener('click', () => {
-      projectModal.showModal();
-    });
-
-    closeModal.addEventListener('click', () => {
-      projectModal.close();
-    });
+    addProjectButton.addEventListener('click', this.showAddProjectModal);
   }
 
+  // OLD METHODS ---------------------------------------------------
   buildProject(project, todoList) {
     const projectCard = document.createElement('div');
     projectCard.classList.add('project-card');
