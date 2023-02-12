@@ -12,37 +12,20 @@ export default class Ui {
 
     // Main content area, projects displayed here
     this.mainContent = this.createElement('div', 'main-content');
-    this.mainContent.innerHTML = `
-    <dialog id="task-modal">
-    <form method="dialog" id="task-form">
-    <label for="title">Title</label><br>
-    <input type="text" id="title-input"><br>
-    <label for="desc">Description</label><br>
-    <input type="text" id="desc-input"><br>
-    <label for="due-date">Due Date</label><br>
-    <input type="date" id="date-input"><br>
-    <label for="priority"> Priority</><br>
-    <input type="text" id="priority-input"><br>
-    <button class="close-modal">Close Modal</button>
-    <button class="task-submit" type="submit">Submit</button>
-    </form>
-    </dialog>
-    <button class="task-button">Add Task</button>
-    `;
 
     // Side bar, project list displayed here
     this.sideBar = this.createElement('div', 'side-bar');
-    this.sideBar.innerHTML = `
-    <button class="project-button">Add Project</button>
-    <dialog id="project-modal">
-    <form method="dialog" id="project-form">
-    <label for="title">Title</label><br>
-    <input type="text" id="project-title"><br>
-    <button class="project-submit" type="submit">Submit</button>
-    </form>
-    </dialog>
-    <div class="project-selectors"></div>`;
 
+    // Add project button and input, located in sidebar
+    this.addProjectButton = this.createElement('button', 'add-project-button');
+    this.addProjectButton.textContent = 'Add Project ';
+
+    this.addProjectInput = this.createElement('input', 'add-project-input');
+
+    // Append project input and buttons to sidebar
+    this.sideBar.append(this.addProjectInput, this.addProjectButton);
+
+    // Append sidebar and main content to grid-wrapper
     this.root.append(this.sideBar, this.mainContent);
   }
 
@@ -59,21 +42,16 @@ export default class Ui {
     return element;
   }
 
-  // createProjectForm() {
-  //   const sideBar = document.getElementById('side-bar');
-  //   sideBar.innerHTML = `
-  //   <button class="project-button">Add Project</button>
-  //   <dialog id="project-modal">
-  //   <form method="dialog" id="project-form">
-  //   <label for="title">Title</label><br>
-  //   <input type="text" id="project-title"><br>
-  //   <button class="project-submit" type="submit">Submit</button>
-  //   </form>
-  //   </dialog>
-  //   <div class="project-selectors"></div>`;
-  // }
+  getProjectTitle() {
+    return this.addProjectInput.value;
+  }
 
-  // Initialize modal buttons
+  clearProjectInput() {
+    this.addProjectInpt = '';
+  }
+
+  // Event listeners
+
   initProjectButton() {
     const projectModal = document.querySelector('.project-modal');
     const projectButton = document.querySelector('.project-button');
