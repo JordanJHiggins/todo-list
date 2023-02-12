@@ -5,13 +5,30 @@ import Project from './project';
 export default class Ui {
   constructor() {
     // Root element, grid container
-    this.main = this.getElement('#grid-wrapper');
+    this.root = this.getElement('#grid-wrapper');
 
     this.title = this.createElement('h1');
     this.title.textContent = 'todoooo';
 
     // Main content area, projects displayed here
     this.mainContent = this.createElement('div', 'main-content');
+    this.mainContent.innerHTML = `
+    <dialog id="task-modal">
+    <form method="dialog" id="task-form">
+    <label for="title">Title</label><br>
+    <input type="text" id="title-input"><br>
+    <label for="desc">Description</label><br>
+    <input type="text" id="desc-input"><br>
+    <label for="due-date">Due Date</label><br>
+    <input type="date" id="date-input"><br>
+    <label for="priority"> Priority</><br>
+    <input type="text" id="priority-input"><br>
+    <button class="close-modal">Close Modal</button>
+    <button class="task-submit" type="submit">Submit</button>
+    </form>
+    </dialog>
+    <button class="task-button">Add Task</button>
+    `;
 
     // Side bar, project list displayed here
     this.sideBar = this.createElement('div', 'side-bar');
@@ -26,7 +43,7 @@ export default class Ui {
     </dialog>
     <div class="project-selectors"></div>`;
 
-    this.main.append(this.sideBar);
+    this.root.append(this.sideBar, this.mainContent);
   }
 
   createElement(tag, className) {
@@ -122,29 +139,29 @@ export default class Ui {
   }
 
   // Create task elements
-  createTaskForm() {
-    const gridWrapper = document.getElementById('grid-wrapper');
-    const mainContent = document.getElementById('main-content');
+  // createTaskForm() {
+  //   const gridWrapper = document.getElementById('grid-wrapper');
+  //   const mainContent = document.getElementById('main-content');
 
-    mainContent.innerHTML = `
-    <dialog id="task-modal">
-    <form method="dialog" id="task-form">
-    <label for="title">Title</label><br>
-    <input type="text" id="title-input"><br>
-    <label for="desc">Description</label><br>
-    <input type="text" id="desc-input"><br>
-    <label for="due-date">Due Date</label><br>
-    <input type="date" id="date-input"><br>
-    <label for="priority"> Priority</><br>
-    <input type="text" id="priority-input"><br>
-    <button class="close-modal">Close Modal</button>
-    <button class="task-submit" type="submit">Submit</button>
-    </form>
-    </dialog>
-    <button class="task-button">Add Task</button>`;
+  //   mainContent.innerHTML = `
+  //   <dialog id="task-modal">
+  //   <form method="dialog" id="task-form">
+  //   <label for="title">Title</label><br>
+  //   <input type="text" id="title-input"><br>
+  //   <label for="desc">Description</label><br>
+  //   <input type="text" id="desc-input"><br>
+  //   <label for="due-date">Due Date</label><br>
+  //   <input type="date" id="date-input"><br>
+  //   <label for="priority"> Priority</><br>
+  //   <input type="text" id="priority-input"><br>
+  //   <button class="close-modal">Close Modal</button>
+  //   <button class="task-submit" type="submit">Submit</button>
+  //   </form>
+  //   </dialog>
+  //   <button class="task-button">Add Task</button>`;
 
-    gridWrapper.appendChild(mainContent);
-  }
+  //   gridWrapper.appendChild(mainContent);
+  // }
 
   initTaskButton() {
     const taskModal = document.querySelector('#task-modal');
