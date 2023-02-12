@@ -2,6 +2,7 @@ import View from './View';
 import TodoList from './todoList';
 import Project from './project';
 import Task from './task';
+import { app } from './index';
 
 export default class Controller {
   constructor(view, todoList) {
@@ -11,7 +12,9 @@ export default class Controller {
 
   // Handler methods...
   handleAddProject = (projectTitle) => {
-    this.todoList.addProject(projectTitle);
-    console.log(this.todoList);
+    const newProject = new Project(projectTitle);
+    app.todoList.addProject(newProject);
+
+    console.log(app.todoList);
   };
 }
