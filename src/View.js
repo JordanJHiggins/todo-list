@@ -54,7 +54,7 @@ export default class View {
   }
 
   getProjectTitleValue() {
-    return this.addProjectInput;
+    return this.addProjectInput.value;
   }
 
   clearProjectInput() {
@@ -74,13 +74,30 @@ export default class View {
   submitNewProject() {
     const projectTitle = document.querySelector('.add-project-input').value;
 
-    console.log(projectTitle);
-
     app.handleAddProject(projectTitle);
   }
 
+  changeProjectTab () {
+    
+  }
+
+
   // Render elements ---------------------------------------
-  renderNewProject(title) {}
+  renderProjectView(title) {
+    const projectView = this.createElement("div", "project-view-container")
+    const projectTitle = this.createElement("h2")
+    projectTitle.textContent = title
+
+    projectView.append(projectTitle)
+    this.mainContent.append(projectView)
+  }
+
+  renderProjectTab (){
+    const projectTabButton = this.createElement("button", "project-tab-button")
+    projectTabButton.textContent = this.getProjectTitleValue()
+
+    this.sideBar.append(projectTabButton)
+  }
 
   // Event listeners -----------------------------------
   initAddProjectButton() {
@@ -92,7 +109,10 @@ export default class View {
   initSubmitProjectButton() {
     const submitProjectButton = document.querySelector('.project-submit');
 
-    submitProjectButton.addEventListener('click', this.submitNewProject);
+    submitProjectButton.addEventListener('click', () => {
+      this.renderProjectTab(this.getProjectTitleValue())
+      this.submitNewProject()
+    });
   }
 
   // OLD METHODS ---------------------------------------------------
@@ -160,7 +180,7 @@ export default class View {
   //   <input type="text" id="desc-input"><br>
   //   <label for="due-date">Due Date</label><br>
   //   <input type="date" id="date-input"><br>
-  //   <label for="priority"> Priority</><br>
+  //   <label for="priority"> Priority</><br>9
   //   <input type="text" id="priority-input"><br>
   //   <button class="close-modal">Close Modal</button>
   //   <button class="task-submit" type="submit">Submit</button>
