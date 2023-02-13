@@ -14,7 +14,7 @@ export default class Controller {
   handleAddProject = (projectTitle) => {
     const newProject = new Project(projectTitle);
     app.todoList.addProject(newProject);
-
+    app.view.renderProjectView(newProject.title)
     console.log(app.todoList);
   };
 }
