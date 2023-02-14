@@ -70,33 +70,73 @@ export default class View {
     }
   }
 
-  // Talk to controller ------------------------------
+  // add show and hide toggle
+  showAddTaskInput(project) {
+    const addTaskContainer = this.createElement('div', 'add-task-container');
+
+    addTaskContainer.innerHTML = `<form method="dialog" id="task-form">
+       <label for="title">Title</label><br>
+       <input type="text" id="title-input"><br>
+       <label for="desc">Description</label><br>
+       <input type="text" id="desc-input"><br>
+       <label for="due-date">Due Date</label><br>
+       <input type="date" id="date-input"><br>
+       <label for="priority"> Priority</><br>
+       <input type="text" id="priority-input"><br>
+       <button class="submit-task-button" type="submit">Submit</button>
+      </form>`;
+
+    project.append(addTaskContainer);
+    this.initSubmitTaskButton();
+  }
+
+  // Talk to controller / pass data to handlers  ------------------------------
   submitNewProject() {
     const projectTitle = document.querySelector('.add-project-input').value;
 
     app.handleAddProject(projectTitle);
   }
 
-  changeProjectTab () {
-    
+  submitNewTask() {
+    const taskTitle = document.getElementById('title-input');
+    const taskDesc = document.getElementById('desc-input');
+    const taskDueDate = document.getElementById('date-input');
+    const taskPriority = document.getElementById('priority-input');
+    const projectTitle = document.getElementsByClassName('.project-title');
+
+    app.handleAddTask(
+      projectTitle.value,
+      taskTitle.value,
+      taskDesc.value,
+      taskDueDate.value,
+      taskPriority.value
+    );
   }
 
+  changeProjectTab(project) {
+    app.handleChangeProjectTab(project);
+  }
 
   // Render elements ---------------------------------------
   renderProjectView(title) {
-    const projectView = this.createElement("div", "project-view-container")
-    const projectTitle = this.createElement("h2")
-    projectTitle.textContent = title
+    const projectView = this.createElement('div', 'project-view-container');
+    const projectTitle = this.createElement('h2', '.project-title');
+    projectTitle.textContent = title;
 
-    projectView.append(projectTitle)
-    this.mainContent.append(projectView)
+    const addTaskButton = this.createElement('button', 'add-task-button');
+    addTaskButton.textContent = 'Add Task';
+
+    projectView.append(projectTitle, addTaskButton);
+    this.mainContent.append(projectView);
+
+    this.showAddTaskInput(projectView);
   }
 
-  renderProjectTab (){
-    const projectTabButton = this.createElement("button", "project-tab-button")
-    projectTabButton.textContent = this.getProjectTitleValue()
+  renderProjectTab() {
+    const projectTabButton = this.createElement('button', 'project-tab-button');
+    projectTabButton.textContent = this.getProjectTitleValue();
 
-    this.sideBar.append(projectTabButton)
+    this.sideBar.appendChild(projectTabButton);
   }
 
   // Event listeners -----------------------------------
@@ -110,9 +150,31 @@ export default class View {
     const submitProjectButton = document.querySelector('.project-submit');
 
     submitProjectButton.addEventListener('click', () => {
-      this.renderProjectTab(this.getProjectTitleValue())
-      this.submitNewProject()
+      this.submitNewProject();
+      this.renderProjectTab(this.getProjectTitleValue());
     });
+  }
+
+  initProjectTabButton() {
+    const projectTabButtons = document.querySelector('.project-tab-button');
+
+    projectTabButtons.addEventListener('click', (e) => {
+      console.log('roobus');
+      const buttonTitle = e.target.textContent;
+      this.changeProjectTab(buttonTitle);
+    });
+  }
+
+  initAddTaskButton(project) {
+    const addTaskButton = document.querySelector('.add-task-button');
+
+    addTaskButton.addEventListener('click', this.showAddTaskInput(project));
+  }
+
+  initSubmitTaskButton() {
+    const submitTaskButton = document.querySelector('.submit-task-button');
+
+    submitTaskButton.addEventListener('click', this.submitNewTask);
   }
 
   // OLD METHODS ---------------------------------------------------
