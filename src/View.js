@@ -102,10 +102,10 @@ export default class View {
     const taskDesc = document.getElementById('desc-input');
     const taskDueDate = document.getElementById('date-input');
     const taskPriority = document.getElementById('priority-input');
-    const projectTitle = document.getElementsByClassName('.project-title');
+    const projectTitle = document.querySelector('.project-title');
 
     app.handleAddTask(
-      projectTitle.value,
+      projectTitle.id,
       taskTitle.value,
       taskDesc.value,
       taskDueDate.value,
@@ -118,10 +118,12 @@ export default class View {
   }
 
   // Render elements ---------------------------------------
-  renderProjectView(title) {
+  renderProjectView(title, projectID) {
     const projectView = this.createElement('div', 'project-view-container');
-    const projectTitle = this.createElement('h2', '.project-title');
+
+    const projectTitle = this.createElement('h2', 'project-title');
     projectTitle.textContent = title;
+    projectTitle.id = projectID;
 
     const addTaskButton = this.createElement('button', 'add-task-button');
     addTaskButton.textContent = 'Add Task';
