@@ -20,6 +20,7 @@ export default class View {
     this.sideBar = this.createElement('div', 'side-bar');
 
     this.addProjectModal = this.createElement('div', 'add-project-modal');
+    this.addProjectModal.style.display = 'none';
 
     // Add project button and input, located in sidebar
     this.addProjectButton = this.createElement('button', 'add-project-button');
@@ -63,6 +64,7 @@ export default class View {
 
   showAddProjectModal() {
     const addProjectModal = document.querySelector('.add-project-modal');
+
     if (addProjectModal.style.display === 'none') {
       addProjectModal.style.display = 'block';
     } else {
@@ -124,23 +126,23 @@ export default class View {
   }
 
   // Render elements ---------------------------------------
-  // renderProjectView(title, projectID) {
-  //   const projectView = this.createElement('div', 'project-view-container');
+  renderProjectView(title, projectID) {
+    const projectView = this.createElement('div', 'project-view-container');
 
-  //   const projectTitle = this.createElement('h2', 'project-title');
-  //   projectTitle.textContent = title;
-  //   projectTitle.id = projectID;
+    const projectTitle = this.createElement('h2', 'project-title');
+    projectTitle.textContent = title;
+    projectTitle.id = projectID;
 
-  //   const addTaskButton = this.createElement('button', 'add-task-button');
-  //   addTaskButton.textContent = 'Add Task';
+    const addTaskButton = this.createElement('button', 'add-task-button');
+    addTaskButton.textContent = 'Add Task';
 
-  //   projectView.append(projectTitle, addTaskButton);
-  //   this.mainContent.append(projectView);
+    projectView.append(projectTitle, addTaskButton);
+    this.mainContent.append(projectView);
 
-  //   this.showAddTaskInput(projectView);
-  //   // this.renderProjectTab(projectTitle.id);
-  //   this.initProjectTabButton();
-  // }
+    this.showAddTaskInput(projectView);
+    // this.renderProjectTab(projectTitle.id);
+    this.initProjectTabButton();
+  }
 
   renderTabbedProjectView(title, projectID) {
     const projectView = this.createElement('div', 'project-view-container');
