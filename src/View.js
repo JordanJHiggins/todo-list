@@ -132,6 +132,8 @@ export default class View {
     this.mainContent.append(projectView);
 
     this.showAddTaskInput(projectView);
+    this.renderProjectTab(title);
+    this.initProjectTabButton();
   }
 
   renderNewTask(task) {
@@ -181,7 +183,6 @@ export default class View {
 
     submitProjectButton.addEventListener('click', () => {
       this.submitNewProject();
-      this.renderProjectTab(this.getProjectTitleValue());
     });
   }
 
