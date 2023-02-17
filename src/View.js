@@ -134,13 +134,25 @@ export default class View {
     this.showAddTaskInput(projectView);
   }
 
-  renderTask(project) {
-    //How to check for duplicate task before rendering all tasks in projects array.
+  renderNewTask(task) {
+    const newTaskCard = this.createElement('div', 'task-card');
+    newTaskCard.innerHTML += `
+    <p>${task.title}</p>
+    <p>${task.desc}</p>
+    <p>${task.dueDate}</p>
+    <p>${task.priority}</p>
+    `;
 
+    this.mainContent.append(newTaskCard);
+  }
+
+  // Rebuilds task list on project tab switch
+  renderTasks(project) {
+    //How to check for duplicate task before rendering all tasks in projects array.
     project.tasks.forEach((task) => {
       const taskCard = this.createElement('div', 'task-card');
 
-      taskCard.innerHTML += `
+      taskCard.innerHTML = `
       <p>${task.title}</p>
       <p>${task.desc}</p>
       <p>${task.dueDate}</p>

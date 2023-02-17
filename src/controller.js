@@ -16,19 +16,19 @@ export default class Controller {
     app.todoList.addProject(newProject);
     app.view.renderProjectView(newProject.title, newProject.id);
     app.view.initAddTaskButton();
-    console.log(app.todoList);
   };
 
   handleAddTask = (projectID, title, desc, dueDate, priority) => {
     const newTask = new Task(title, desc, dueDate, priority);
 
-    app.todoList.findProject(projectID);
-    console.log(newTask);
+    const currentProject = app.todoList.findProject(projectID);
+
+    currentProject.addTask(newTask);
+    app.view.renderNewTask(newTask);
   };
 
   // Rerender project view on selector click?
   handleChangeProjectTab = (project) => {
-    console.log(project);
     app.view.renderProjectView(project);
   };
 }
