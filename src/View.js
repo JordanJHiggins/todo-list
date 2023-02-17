@@ -72,6 +72,10 @@ export default class View {
     }
   }
 
+  closeAddProjectModal(modal) {
+    modal.style.display = 'none';
+  }
+
   clearProjectView(content) {
     while (content.hasChildNodes()) {
       content.removeChild(content.firstChild);
@@ -206,8 +210,10 @@ export default class View {
   initSubmitProjectButton() {
     const submitProjectButton = document.querySelector('.project-submit');
 
-    submitProjectButton.addEventListener('click', () => {
+    submitProjectButton.addEventListener('click', (e) => {
+      const projectModal = e.target.parentNode;
       this.submitNewProject();
+      this.closeAddProjectModal(projectModal);
     });
   }
 
