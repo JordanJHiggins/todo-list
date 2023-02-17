@@ -124,23 +124,23 @@ export default class View {
   }
 
   // Render elements ---------------------------------------
-  renderProjectView(title, projectID) {
-    const projectView = this.createElement('div', 'project-view-container');
+  // renderProjectView(title, projectID) {
+  //   const projectView = this.createElement('div', 'project-view-container');
 
-    const projectTitle = this.createElement('h2', 'project-title');
-    projectTitle.textContent = title;
-    projectTitle.id = projectID;
+  //   const projectTitle = this.createElement('h2', 'project-title');
+  //   projectTitle.textContent = title;
+  //   projectTitle.id = projectID;
 
-    const addTaskButton = this.createElement('button', 'add-task-button');
-    addTaskButton.textContent = 'Add Task';
+  //   const addTaskButton = this.createElement('button', 'add-task-button');
+  //   addTaskButton.textContent = 'Add Task';
 
-    projectView.append(projectTitle, addTaskButton);
-    this.mainContent.append(projectView);
+  //   projectView.append(projectTitle, addTaskButton);
+  //   this.mainContent.append(projectView);
 
-    this.showAddTaskInput(projectView);
-    this.renderProjectTab(projectTitle.id);
-    this.initProjectTabButton();
-  }
+  //   this.showAddTaskInput(projectView);
+  //   // this.renderProjectTab(projectTitle.id);
+  //   this.initProjectTabButton();
+  // }
 
   renderTabbedProjectView(title, projectID) {
     const projectView = this.createElement('div', 'project-view-container');
@@ -190,7 +190,7 @@ export default class View {
     const projectTabButton = this.createElement('button', 'project-tab-button');
     projectTabButton.textContent = this.getProjectTitleValue();
     projectTabButton.id = projectID;
-    // should call renderTask?
+
     this.sideBar.appendChild(projectTabButton);
   }
 
