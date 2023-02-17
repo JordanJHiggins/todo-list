@@ -28,7 +28,10 @@ export default class Controller {
   };
 
   // Rerender project view on selector click?
-  handleChangeProjectTab = (project) => {
-    app.view.renderProjectView(project);
+  handleChangeProjectTab = (projectID) => {
+    const tabbedProject = app.todoList.findProject(projectID);
+    app.view.clearProjectView(app.view.mainContent);
+    app.view.renderTabbedProjectView(tabbedProject.title, tabbedProject.id);
+    app.view.renderTasks(tabbedProject);
   };
 }

@@ -70,6 +70,12 @@ export default class View {
     }
   }
 
+  clearProjectView(content) {
+    while (content.hasChildNodes()) {
+      content.removeChild(content.firstChild);
+    }
+  }
+
   // add show and hide toggle
   showAddTaskInput(project) {
     const addTaskContainer = this.createElement('div', 'add-task-container');
@@ -113,8 +119,8 @@ export default class View {
     );
   }
 
-  changeProjectTab(project) {
-    app.handleChangeProjectTab(project);
+  changeProjectTab(projectID) {
+    app.handleChangeProjectTab(projectID);
   }
 
   // Render elements ---------------------------------------
@@ -132,8 +138,24 @@ export default class View {
     this.mainContent.append(projectView);
 
     this.showAddTaskInput(projectView);
-    this.renderProjectTab(title);
+    this.renderProjectTab(projectTitle.id);
     this.initProjectTabButton();
+  }
+
+  renderTabbedProjectView(title, projectID) {
+    const projectView = this.createElement('div', 'project-view-container');
+
+    const projectTitle = this.createElement('h2', 'project-title');
+    projectTitle.textContent = title;
+    projectTitle.id = projectID;
+
+    const addTaskButton = this.createElement('button', 'add-task-button');
+    addTaskButton.textContent = 'Add Task';
+
+    projectView.append(projectTitle, addTaskButton);
+    this.mainContent.append(projectView);
+
+    this.showAddTaskInput(projectView);
   }
 
   renderNewTask(task) {
@@ -164,9 +186,10 @@ export default class View {
     });
   }
 
-  renderProjectTab() {
+  renderProjectTab(projectID) {
     const projectTabButton = this.createElement('button', 'project-tab-button');
     projectTabButton.textContent = this.getProjectTitleValue();
+    projectTabButton.id = projectID;
     // should call renderTask?
     this.sideBar.appendChild(projectTabButton);
   }
@@ -187,13 +210,15 @@ export default class View {
   }
 
   initProjectTabButton() {
-    const projectTabButtons = document.querySelector('.project-tab-button');
+    const projectTabButtons = document.querySelectorAll('.project-tab-button');
 
-    projectTabButtons.addEventListener('click', (e) => {
-      console.log('roobus');
-      const buttonTitle = e.target.textContent;
-      this.changeProjectTab(buttonTitle);
-    });
+    projectTabButtons.forEach((button) =>
+      button.addEventListener('click', (e) => {
+        console.log('roobus');
+        const buttonID = e.target.id;
+        this.changeProjectTab(buttonID);
+      })
+    );
   }
 
   initAddTaskButton(project) {
@@ -220,12 +245,6 @@ export default class View {
 
     this.createProjectSelector(project, todoList);
     this.projectViewHandler(projectCard);
-  }
-
-  clearProjectView(content) {
-    while (content.hasChildNodes()) {
-      content.removeChild(content.firstChild);
-    }
   }
 
   createNewProject(todoList) {
