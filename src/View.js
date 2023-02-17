@@ -134,10 +134,26 @@ export default class View {
     this.showAddTaskInput(projectView);
   }
 
+  renderTask(project) {
+    //How to check for duplicate task before rendering all tasks in projects array.
+
+    project.tasks.forEach((task) => {
+      const taskCard = this.createElement('div', 'task-card');
+
+      taskCard.innerHTML += `
+      <p>${task.title}</p>
+      <p>${task.desc}</p>
+      <p>${task.dueDate}</p>
+      <p>${task.priority}</p>`;
+
+      this.mainContent.append(taskCard);
+    });
+  }
+
   renderProjectTab() {
     const projectTabButton = this.createElement('button', 'project-tab-button');
     projectTabButton.textContent = this.getProjectTitleValue();
-
+    // should call renderTask?
     this.sideBar.appendChild(projectTabButton);
   }
 
