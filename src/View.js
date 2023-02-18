@@ -176,8 +176,9 @@ export default class View {
 
   renderNewTask(task) {
     const newTaskCard = this.createElement('div', 'task-card');
+    newTaskCard.id = task.id;
     newTaskCard.innerHTML += `
-    <p>${task.title}</p>
+    <p class="task-card-title" contenteditable="true">${task.title}</p>
     <p>${task.desc}</p>
     <p>${task.dueDate}</p>
     <p>${task.priority}</p>
@@ -191,7 +192,7 @@ export default class View {
     //How to check for duplicate task before rendering all tasks in projects array.
     project.tasks.forEach((task) => {
       const taskCard = this.createElement('div', 'task-card');
-
+      taskCard.id = task.id;
       taskCard.innerHTML = `
       <p>${task.title}</p>
       <p>${task.desc}</p>
@@ -250,5 +251,15 @@ export default class View {
     const submitTaskButton = document.querySelector('.submit-task-button');
 
     submitTaskButton.addEventListener('click', this.submitNewTask);
+  }
+
+  editTaskTitle(currentProject) {
+    const taskCardTitle = document.querySelector('.task-card-title');
+
+    taskCardTitle.addEventListener('input', (e) => {
+      const taskID = e.target.parentNode.id;
+      const updatedTitle = e.target.innerText;
+      app.handleEditTask(currentProject, taskID, updatedTitle);
+    });
   }
 }
