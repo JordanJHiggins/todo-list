@@ -179,7 +179,7 @@ export default class View {
     newTaskCard.id = task.id;
     newTaskCard.innerHTML += `
     <p class="task-card-title" contenteditable="true">${task.title}</p>
-    <p>${task.desc}</p>
+    <p class="task-card-desc" contenteditable="true">${task.desc}</p>
     <p>${task.dueDate}</p>
     <p>${task.priority}</p>
     `;
@@ -259,7 +259,17 @@ export default class View {
     taskCardTitle.addEventListener('input', (e) => {
       const taskID = e.target.parentNode.id;
       const updatedTitle = e.target.innerText;
-      app.handleEditTask(currentProject, taskID, updatedTitle);
+      app.handleEditTaskTitle(currentProject, taskID, updatedTitle);
+    });
+  }
+
+  editDesc(currentProject) {
+    const taskCardDesc = document.querySelector('.task-card-desc');
+
+    taskCardDesc.addEventListener('input', (e) => {
+      const taskID = e.target.parentNode.id;
+      const updatedDesc = e.target.innerText;
+      app.handleEditDesc(currentProject, taskID, updatedDesc);
     });
   }
 }
