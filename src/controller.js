@@ -39,5 +39,6 @@ export default class Controller {
     app.view.clearProjectView(app.view.mainContent);
     app.view.renderTabbedProjectView(tabbedProject.title, tabbedProject.id);
     app.view.renderTasks(tabbedProject);
+    app.view.initAddTaskButton();
   };
 }

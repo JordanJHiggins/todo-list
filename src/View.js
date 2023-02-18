@@ -62,13 +62,23 @@ export default class View {
     this.addProjectInput = '';
   }
 
-  showAddProjectModal() {
+  toggleProjectModal() {
     const addProjectModal = document.querySelector('.add-project-modal');
 
     if (addProjectModal.style.display === 'none') {
       addProjectModal.style.display = 'block';
     } else {
       addProjectModal.style.display = 'none';
+    }
+  }
+
+  toggleTaskInput() {
+    const addTaskContainer = document.querySelector('.add-task-container');
+
+    if (addTaskContainer.style.display === 'none') {
+      addTaskContainer.style.display = 'block';
+    } else {
+      addTaskContainer.style.display = 'none';
     }
   }
 
@@ -83,9 +93,9 @@ export default class View {
   }
 
   // add show and hide toggle
-  showAddTaskInput(project) {
+  renderTaskInput(project) {
     const addTaskContainer = this.createElement('div', 'add-task-container');
-
+    addTaskContainer.style.display = 'none';
     addTaskContainer.innerHTML = `<form method="dialog" id="task-form">
        <label for="title">Title</label><br>
        <input type="text" id="title-input"><br>
@@ -143,7 +153,7 @@ export default class View {
     projectView.append(projectTitle, addTaskButton);
     this.mainContent.append(projectView);
 
-    this.showAddTaskInput(projectView);
+    // this.showAddTaskInput(projectView);
     // this.renderProjectTab(projectTitle.id);
     this.initProjectTabButton();
   }
@@ -161,7 +171,7 @@ export default class View {
     projectView.append(projectTitle, addTaskButton);
     this.mainContent.append(projectView);
 
-    this.showAddTaskInput(projectView);
+    this.renderTaskInput(projectView);
   }
 
   renderNewTask(task) {
@@ -204,7 +214,7 @@ export default class View {
   initAddProjectButton() {
     const addProjectButton = document.querySelector('.add-project-button');
 
-    addProjectButton.addEventListener('click', this.showAddProjectModal);
+    addProjectButton.addEventListener('click', this.toggleProjectModal);
   }
 
   initSubmitProjectButton() {
@@ -229,10 +239,11 @@ export default class View {
     );
   }
 
+  // Shows task input in project
   initAddTaskButton(project) {
     const addTaskButton = document.querySelector('.add-task-button');
 
-    addTaskButton.addEventListener('click', this.showAddTaskInput(project));
+    addTaskButton.addEventListener('click', this.toggleTaskInput);
   }
 
   initSubmitTaskButton() {
