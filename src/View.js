@@ -200,9 +200,9 @@ export default class View {
       const taskCard = this.createElement('div', 'task-card');
       taskCard.id = task.id;
       taskCard.innerHTML = `
-      <p>${task.title}</p>
-      <p>${task.desc}</p>
-      <p>${task.dueDate}</p>
+      <p class='task-card-title' contenteditable='true'>${task.title}</p>
+      <p class='task-card-desc' contenteditable='true'>${task.desc}</p>
+      <input class='task-card-date' type='date' value='${task.dueDate}'></input>
       <p>${task.priority}</p>`;
 
       this.mainContent.append(taskCard);

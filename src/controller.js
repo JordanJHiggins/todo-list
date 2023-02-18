@@ -31,6 +31,10 @@ export default class Controller {
     app.view.renderTabbedProjectView(tabbedProject.title, tabbedProject.id);
     app.view.renderTasks(tabbedProject);
     app.view.initAddTaskButton();
+
+    app.view.editTaskTitle(tabbedProject);
+    app.view.editDesc(tabbedProject);
+    app.view.editDueDate(tabbedProject);
   };
 
   handleAddTask = (projectID, title, desc, dueDate, priority) => {
