@@ -43,6 +43,7 @@ export default class Controller {
 
     app.view.editTaskTitle(currentProject);
     app.view.editDesc(currentProject);
+    app.view.editDueDate(currentProject);
   };
 
   handleEditTaskTitle = (currentProject, taskID, data) => {
@@ -57,6 +58,14 @@ export default class Controller {
     const currentTask = currentProject.findTask(taskID);
 
     currentProject.updateTask(currentTask.id, { desc: data });
+
+    console.log(currentTask);
+  };
+
+  handleEditDueDate = (currentProject, taskID, data) => {
+    const currentTask = currentProject.findTask(taskID);
+
+    currentProject.updateTask(currentTask.id, { dueDate: data });
 
     console.log(currentTask);
   };

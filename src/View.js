@@ -92,6 +92,12 @@ export default class View {
     }
   }
 
+  openDateInput(taskCard) {
+    const datePicker = this.createElement('input', 'date-picker');
+    datePicker.setAttribute('type', 'date');
+
+    taskCard.append(datePicker);
+  }
   // add show and hide toggle
   renderTaskInput(project) {
     const addTaskContainer = this.createElement('div', 'add-task-container');
@@ -178,9 +184,9 @@ export default class View {
     const newTaskCard = this.createElement('div', 'task-card');
     newTaskCard.id = task.id;
     newTaskCard.innerHTML += `
-    <p class="task-card-title" contenteditable="true">${task.title}</p>
-    <p class="task-card-desc" contenteditable="true">${task.desc}</p>
-    <p>${task.dueDate}</p>
+    <p class='task-card-title' contenteditable='true'>${task.title}</p>
+    <p class='task-card-desc' contenteditable='true'>${task.desc}</p>
+    <input class='task-card-date' type='date' value='${task.dueDate}'></p>
     <p>${task.priority}</p>
     `;
 
@@ -270,6 +276,17 @@ export default class View {
       const taskID = e.target.parentNode.id;
       const updatedDesc = e.target.innerText;
       app.handleEditDesc(currentProject, taskID, updatedDesc);
+    });
+  }
+
+  editDueDate(currentProject) {
+    const taskDueDate = document.querySelector('.task-card-date');
+
+    taskDueDate.addEventListener('change', (e) => {
+      // this.openDateInput(taskDueDate);
+      const taskID = e.target.parentNode.id;
+      const updatedDueDate = e.target.value;
+      app.handleEditDueDate(currentProject, taskID, updatedDueDate);
     });
   }
 }
