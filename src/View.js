@@ -189,9 +189,15 @@ export default class View {
     <input class='task-card-date' type='date' value='${task.dueDate}'></p>
     <p class="task-card-priority" contenteditable="true">${task.priority}</p>
     <button data-modal-target="#modal">Edit</button>
+    <div class="modal" id="modal">modal stuff
+    <button data-close-button class="close-button">x</button>
+    </div>
+    <div id="overlay"></div>
     `;
 
     this.mainContent.append(newTaskCard);
+    this.initOpenModalButton();
+    this.initOverlay();
   }
 
   // Rebuilds task list on project tab switch
@@ -204,16 +210,22 @@ export default class View {
       <p class='task-card-title' contenteditable='true'>${task.title}</p>
       <p class='task-card-desc' contenteditable='true'>${task.desc}</p>
       <input class='task-card-date' type='date' value='${task.dueDate}'></input>
-      <p class="task-card-priority contenteditable="true">${task.priority}</p>`;
+      <p class="task-card-priority contenteditable="true">${task.priority}</p>
+      <button data-modal-target="#modal">Edit</button>
+      <div class= "modal" id="modal">modal stuff</div>`;
 
       this.mainContent.append(taskCard);
     });
   }
 
   renderTaskEditView() {
-    const editTaskView = this.createElement('div', 'modal');
+    const taskCard = document.querySelector('.task-card');
 
+    const editTaskView = this.createElement('div');
+    editTaskView.id = 'modal';
     editTaskView.innerHTML = `Issa modal`;
+
+    this.taskCard.appendChild(editTaskView);
   }
 
   renderProjectTab(projectID) {
@@ -306,27 +318,28 @@ export default class View {
     });
   }
 
-  initOpenModalButton()
-  const openModalButton = document.querySelectorAll("[data-modal-target]")
+  initOpenModalButton() {
+    const openModalButton = document.querySelectorAll('[data-modal-target]');
 
-  openModalButton.forEach((button) => {
-    button.addEventListener("click", () => {
-      const modal = document.querySelector(button.dataSet.modalTarget)
-      openEditModal(modal)
-    })
-  })
+    openModalButton.forEach((button) => {
+      button.addEventListener('click', () => {
+        console.log('roobussss');
+        const modal = document.querySelector(button.dataset.modalTarget);
+        this.openEditModal(modal);
+      });
+    });
+  }
 
-  initOverlay () {
-    const overlay = document.querySelector("#overlay")
+  initOverlay() {
+    const overlay = document.getElementById('overlay');
 
-    overlay.addEventListener("click", (modal) => {
-      const openModals = document.querySelectorAll(".modal.active")
+    overlay.addEventListener('click', (modal) => {
+      const openModals = document.querySelectorAll('.modal.active');
 
       openModals.forEach((modal) => {
-        closeModal(modal)
-      })
-    })
-
+        this.closeModal(modal);
+      });
+    });
   }
 
   // Edit task modal
@@ -341,8 +354,6 @@ export default class View {
     if (modal == null) return;
 
     modal.classList.remove('active');
-    modal.classList.remove('active');
+    overlay.classList.remove('active');
   }
-
-
 }
