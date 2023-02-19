@@ -184,10 +184,11 @@ export default class View {
     const newTaskCard = this.createElement('div', 'task-card');
     newTaskCard.id = task.id;
     newTaskCard.innerHTML += `
-    <p class='task-card-title' contenteditable='true'>${task.title}</p>
+    <p class='task-card-title' contenteditable='true'>${task.title}<button class="delete-task-button">X</button></p>
     <p class='task-card-desc' contenteditable='true'>${task.desc}</p>
     <input class='task-card-date' type='date' value='${task.dueDate}'></p>
     <p class="task-card-priority" contenteditable="true">${task.priority}</p>
+    <button data-modal-target="#modal">Edit</button>
     `;
 
     this.mainContent.append(newTaskCard);
@@ -207,6 +208,12 @@ export default class View {
 
       this.mainContent.append(taskCard);
     });
+  }
+
+  renderTaskEditView() {
+    const editTaskView = this.createElement('div', 'modal');
+
+    editTaskView.innerHTML = `Issa modal`;
   }
 
   renderProjectTab(projectID) {
@@ -297,5 +304,21 @@ export default class View {
       const updatedPriority = e.target.value;
       app.handleEditPriority(currentProject, taskID, updatedPriority);
     });
+  }
+
+  // Edit task modal
+
+  openEditModal(modal) {
+    if (modal == null) return;
+
+    modal.classList.add('active');
+    overlay.classList.add('active');
+  }
+
+  closeModal(modal) {
+    if (modal == null) return;
+
+    modal.classList.remove('active');
+    modal.classList.remove('active');
   }
 }
