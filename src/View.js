@@ -316,6 +316,19 @@ export default class View {
     })
   })
 
+  initOverlay () {
+    const overlay = document.querySelector("#overlay")
+
+    overlay.addEventListener("click", (modal) => {
+      const openModals = document.querySelectorAll(".modal.active")
+
+      openModals.forEach((modal) => {
+        closeModal(modal)
+      })
+    })
+
+  }
+
   // Edit task modal
   openEditModal(modal) {
     if (modal == null) return;
