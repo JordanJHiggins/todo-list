@@ -306,8 +306,17 @@ export default class View {
     });
   }
 
-  // Edit task modal
+  initOpenModalButton()
+  const openModalButton = document.querySelectorAll("[data-modal-target]")
 
+  openModalButton.forEach((button) => {
+    button.addEventListener("click", () => {
+      const modal = document.querySelector(button.dataSet.modalTarget)
+      openEditModal(modal)
+    })
+  })
+
+  // Edit task modal
   openEditModal(modal) {
     if (modal == null) return;
 
@@ -321,4 +330,6 @@ export default class View {
     modal.classList.remove('active');
     modal.classList.remove('active');
   }
+
+
 }
