@@ -10,6 +10,7 @@
 html,
 body {
   min-height: 100vh;
+  background-color: darkgray;
 }
 
 /* Page structure */
@@ -21,13 +22,17 @@ body {
   min-width: 100vw;
 }
 
-#main-content {
+.main-content {
   display: flex;
   flex-direction: column;
   gap: 2rem;
   border: solid green 2px;
 }
 
+/* Project Input */
+.add-project-modal {
+  border: 1px goldenrod solid;
+}
 /* Project card */
 .project-card {
   border: solid red 1px;
@@ -37,11 +42,11 @@ body {
 }
 
 /* Side bar  */
-#side-bar {
+.side-bar {
   border: solid blue 1px;
 }
 
-/* Modal */
+/* New Task Modal */
 #task-modal,
 #project-modal {
   padding: 2rem;
@@ -51,6 +56,43 @@ body {
 }
 .modal::backdrop {
   background: rgba(0, 0, 0, 0.5);
+}
+
+/* Edit Task Modal */
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  transition: 200ms;
+  border: 1px solid gray;
+  border-radius: 15px;
+  min-height: 40vh;
+  width: 20vw;
+  z-index: 10;
+  background-color: #d6d3d1;
+}
+
+.modal.active {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+#overlay {
+  position: fixed;
+  opacity: 0;
+  transition: 200ms;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  pointer-events: none;
+}
+
+#overlay.active {
+  opacity: 1;
+  pointer-events: all;
 }
 
 /* Task card */
