@@ -187,7 +187,7 @@ export default class View {
     <p class='task-card-title' contenteditable='true'>${task.title}</p>
     <p class='task-card-desc' contenteditable='true'>${task.desc}</p>
     <input class='task-card-date' type='date' value='${task.dueDate}'></p>
-    <p>${task.priority}</p>
+    <p class="task-card-priority" contenteditable="true">${task.priority}</p>
     `;
 
     this.mainContent.append(newTaskCard);
@@ -203,7 +203,7 @@ export default class View {
       <p class='task-card-title' contenteditable='true'>${task.title}</p>
       <p class='task-card-desc' contenteditable='true'>${task.desc}</p>
       <input class='task-card-date' type='date' value='${task.dueDate}'></input>
-      <p>${task.priority}</p>`;
+      <p class="task-card-priority contenteditable="true">${task.priority}</p>`;
 
       this.mainContent.append(taskCard);
     });
@@ -283,10 +283,19 @@ export default class View {
     const taskDueDate = document.querySelector('.task-card-date');
 
     taskDueDate.addEventListener('change', (e) => {
-      // this.openDateInput(taskDueDate);
       const taskID = e.target.parentNode.id;
       const updatedDueDate = e.target.value;
       app.handleEditDueDate(currentProject, taskID, updatedDueDate);
+    });
+  }
+
+  editPriority(currentProject) {
+    const taskPriority = document.querySelector('.task-card-priority');
+
+    taskPriority.addEventListener('input', (e) => {
+      const taskID = e.target.parentNode.id;
+      const updatedPriority = e.target.value;
+      app.handleEditPriority(currentProject, taskID, updatedPriority);
     });
   }
 }

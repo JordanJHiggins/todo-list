@@ -73,4 +73,12 @@ export default class Controller {
 
     console.log(currentTask);
   };
+
+  handleEditPriority = (currentProject, taskID, data) => {
+    const currentTask = currentProject.findTask(taskID);
+
+    currentProject.updateTask(currentTask.id, { priority: data });
+
+    console.log(currentTask);
+  };
 }
