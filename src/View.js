@@ -130,18 +130,19 @@ export default class View {
 
   renderEditTaskInput(task) {
     const editTaskContainer = this.createElement('div', 'edit-task-container');
+    editTaskContainer.id = task.id;
     editTaskContainer.style.display = 'none';
     editTaskContainer.innerHTML = `
-    <form method="dialog" id="edit-task-form">
+    <form method="dialog" id=${task.id}>
        <label for="title">Title</label><br>
-       <input type="text" id="updated-title" value=${task.title}><br>
+       <input type="text" class="updated-task-title" id="updated-title" placeholder=${task.title}><br>
        <label for="desc">Description</label><br>
        <input type="text" id="desc-input"><br>
        <label for="due-date">Due Date</label><br>
        <input type="date" id="date-input"><br>
        <label for="priority"> Priority</><br>
        <input type="text" id="priority-input"><br>
-       <button class="submit-task-button" type="submit">Submit</button>
+       <button class="save-updates" type="submit">save</button>
       </form>
     `;
 
@@ -317,11 +318,13 @@ export default class View {
   }
 
   editTaskTitle(currentProject) {
+    const saveButton = document.querySelector('.save-updates');
     const taskCardTitle = document.querySelector('.updated-task-title');
 
-    taskCardTitle.addEventListener('input', (e) => {
-      const taskID = e.target.parentNode.dataset.id;
-      const updatedTitle = e.target.innerText;
+    taskCardTitle.addEventListener('change', (e) => {
+      const taskID = e.target.parentNode.id;
+      const updatedTitle = e.target.value;
+
       app.handleEditTaskTitle(currentProject, taskID, updatedTitle);
     });
   }
@@ -330,8 +333,8 @@ export default class View {
     const taskCardDesc = document.querySelector('.updated-task-desc');
 
     taskCardDesc.addEventListener('input', (e) => {
-      const taskID = e.target.parentNode.dataset.id;
-      const updatedDesc = e.target.innerText;
+      const taskID = e.target.parentNode.id;
+      const updatedDesc = e.target.value;
       app.handleEditDesc(currentProject, taskID, updatedDesc);
     });
   }
@@ -363,9 +366,11 @@ export default class View {
     editTaskButton.addEventListener('click', this.toggleEditTaskInput);
   }
 
-  initSaveButton() {
-    const saveButton = document.querySelector('.save-button');
-    const taskId = saveButton.dataset.id;
-    saveButton.addEventListener('click');
+  initSaveButton(currentProject) {
+    const saveButton = document.querySelector('.save-updates');
+    saveButton.addEventListener('click', () => {
+      // on save button click render tasks again.
+      app.view.renderTasks(currentProject);
+    });
   }
 }

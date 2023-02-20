@@ -29,6 +29,7 @@ export default class Controller {
     app.view.renderTabbedProjectView(tabbedProject.title, tabbedProject.id);
     app.view.renderTasks(tabbedProject);
     app.view.initAddTaskButton();
+    app.view.initEditTaskButton();
 
     app.view.editTaskTitle(tabbedProject);
     app.view.editDesc(tabbedProject);
@@ -42,7 +43,7 @@ export default class Controller {
 
     currentProject.addTask(newTask);
     app.view.renderNewTask(newTask);
-
+    app.view.initEditTaskButton();
     app.view.editTaskTitle(currentProject);
     app.view.editDesc(currentProject);
     app.view.editDueDate(currentProject);
@@ -57,14 +58,16 @@ export default class Controller {
 
     currentProject.updateTask(currentTask.id, { title: data });
 
+    app.view.initSaveButton(currentProject);
     console.log(currentTask);
   };
 
   handleEditDesc = (currentProject, taskID, data) => {
     const currentTask = currentProject.findTask(taskID);
 
-    currentProject.updateTask(currentTask.id, { desc: data });
-
+    currentProject.updateTask(currentTask.id, {
+      desc: data,
+    });
     console.log(currentTask);
   };
 
