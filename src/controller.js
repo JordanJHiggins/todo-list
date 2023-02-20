@@ -16,11 +16,9 @@ export default class Controller {
     app.todoList.addProject(newProject);
 
     console.log(newProject);
-    // app.view.renderProjectView(newProject.title, newProject.id);
 
     app.view.renderProjectTab(newProject.id, projectTitle);
     app.view.initProjectTabButton();
-    // app.view.initAddTaskButton();
   };
 
   // Rerender project view on selector click?
@@ -48,6 +46,10 @@ export default class Controller {
     app.view.editTaskTitle(currentProject);
     app.view.editDesc(currentProject);
     app.view.editDueDate(currentProject);
+  };
+
+  handleEditTaskView = (projectID) => {
+    // call rerender task when submitting edited task?
   };
 
   handleEditTaskTitle = (currentProject, taskID, data) => {

@@ -98,7 +98,7 @@ export default class View {
 
     taskCard.append(datePicker);
   }
-  // add show and hide toggle
+
   renderTaskInput(project) {
     const addTaskContainer = this.createElement('div', 'add-task-container');
     addTaskContainer.style.display = 'none';
@@ -116,6 +116,24 @@ export default class View {
 
     project.append(addTaskContainer);
     this.initSubmitTaskButton();
+  }
+
+  renderEditTaskInput(task) {
+    const editTaskForm = this.createElement('div', 'edit-task-form');
+
+    editTaskForm.innerHTML = `
+    <form method="dialog" id="edit-task-form">
+       <label for="title">Title</label><br>
+       <input type="text" id="updated-title" value=${task.title}><br>
+       <label for="desc">Description</label><br>
+       <input type="text" id="desc-input"><br>
+       <label for="due-date">Due Date</label><br>
+       <input type="date" id="date-input"><br>
+       <label for="priority"> Priority</><br>
+       <input type="text" id="priority-input"><br>
+       <button class="submit-task-button" type="submit">Submit</button>
+      </form>
+    `;
   }
 
   // Talk to controller / pass data to handlers  ------------------------------
@@ -139,6 +157,12 @@ export default class View {
       taskDueDate.value,
       taskPriority.value
     );
+  }
+
+  submitUpdatedTask() {
+    const updatedTitle = document.querySelector('.updated-task-title');
+
+    app.handleEditTaskView(updatedTitle.value);
   }
 
   changeProjectTab(projectID) {
@@ -188,20 +212,10 @@ export default class View {
     <p class='task-card-desc'>${task.desc}</p>
     <input class='task-card-date' type='date' value='${task.dueDate}'></p>
     <p class="task-card-priority" >${task.priority}</p>
-
-    <button data-modal-target="#modal">Edit</button>
-    <div class="modal" id="modal" data-id=${newTaskCard.id}>
-    <p class='updated-task-title' contenteditable='true'>${task.title}<button class="delete-task-button">X</button></p>
-    <p class='updated-task-desc' contenteditable='true'>${task.desc}</p>
-    <input class='updated-task-date' type='date' value='${task.dueDate}'></p>
-    <p class="updated-task-priority" contenteditable="true">${task.priority}</p>
-    </div>
-    <div id="overlay"></div>
+    <button class="edit-task-button">Edit</button>
     `;
 
     this.mainContent.append(newTaskCard);
-    this.initOpenModalButton();
-    this.initOverlay();
   }
 
   // Rebuilds task list on project tab switch
@@ -214,19 +228,11 @@ export default class View {
       <p class='task-card-title'>${task.title}</p>
       <p class='task-card-desc'>${task.desc}</p>
       <input class='task-card-date' type='date' value='${task.dueDate}'></input>
-      <p class="task-card-priority >${task.priority}</p>
-      <button data-modal-target="#modal">Edit</button>
-      <div class= "modal" id="modal">
-      <p class='task-card-title' contenteditable='true'>${task.title}<button class="delete-task-button">X</button></p>
-      <p class='task-card-desc' contenteditable='true'>${task.desc}</p>
-      <input class='task-card-date' type='date' value='${task.dueDate}'></p>
-      <p class="task-card-priority" contenteditable="true">${task.priority}</p>
-      </div>
-      <div id="overlay"></div>`;
+      <p class="task-card-priority">${task.priority}</p>
+      <button class="edit-task-button">Edit</button>
+      `;
 
       this.mainContent.append(taskCard);
-      this.initOpenModalButton();
-      this.initOverlay();
     });
   }
 
@@ -337,43 +343,49 @@ export default class View {
     });
   }
 
-  initOpenModalButton() {
-    const openModalButton = document.querySelectorAll('[data-modal-target]');
+  // initOpenModalButton() {
+  //   const openModalButton = document.querySelectorAll('[data-modal-target]');
 
-    openModalButton.forEach((button) => {
-      button.addEventListener('click', () => {
-        console.log('roobussss');
-        const modal = document.querySelector(button.dataset.modalTarget);
-        this.openEditModal(modal);
-      });
-    });
+  //   openModalButton.forEach((button) => {
+  //     button.addEventListener('click', () => {
+  //       console.log('roobussss');
+  //       const modal = document.querySelector(button.dataset.modalTarget);
+  //       this.openEditModal(modal);
+  //     });
+  //   });
+  // }
+
+  // initCloseModalButton() {
+  //   const overlay = document.getElementById('overlay');
+
+  //   overlay.addEventListener('click', (modal) => {
+  //     const openModals = document.querySelectorAll('.modal.active');
+
+  //     openModals.forEach((modal) => {
+  //       this.closeModal(modal);
+  //     });
+  //   });
+  // }
+
+  initSaveButton() {
+    const saveButton = document.querySelector('.save-button');
+    const taskId = saveButton.dataset.id;
+    saveButton.addEventListener('click');
   }
 
-  initOverlay() {
-    const overlay = document.getElementById('overlay');
+  // // Edit task modal
+  // openEditModal(modal) {
+  //   if (modal == null) return;
 
-    overlay.addEventListener('click', (modal) => {
-      const openModals = document.querySelectorAll('.modal.active');
+  //   modal.classList.add('active');
+  //   overlay.classList.add('active');
+  // }
 
-      openModals.forEach((modal) => {
-        this.closeModal(modal);
-      });
-    });
-  }
+  // closeModal(modal) {
+  //   if (modal == null) return;
 
-  // Edit task modal
-  openEditModal(modal) {
-    if (modal == null) return;
-
-    modal.classList.add('active');
-    overlay.classList.add('active');
-  }
-
-  closeModal(modal) {
-    if (modal == null) return;
-
-    modal.classList.remove('active');
-    overlay.classList.remove('active');
-    // call app.handleEditTaskView()?
-  }
+  //   modal.classList.remove('active');
+  //   overlay.classList.remove('active');
+  //   // call app.handleEditTaskView()?
+  // }
 }
