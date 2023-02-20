@@ -82,6 +82,16 @@ export default class View {
     }
   }
 
+  toggleEditTaskInput() {
+    const editTaskContainer = document.querySelector('.edit-task-container');
+
+    if (editTaskContainer.style.display === 'none') {
+      editTaskContainer.style.display = 'block';
+    } else {
+      editTaskContainer.style.display = 'none';
+    }
+  }
+
   closeAddProjectModal(modal) {
     modal.style.display = 'none';
   }
@@ -119,9 +129,9 @@ export default class View {
   }
 
   renderEditTaskInput(task) {
-    const editTaskForm = this.createElement('div', 'edit-task-form');
-
-    editTaskForm.innerHTML = `
+    const editTaskContainer = this.createElement('div', 'edit-task-container');
+    editTaskContainer.style.display = 'none';
+    editTaskContainer.innerHTML = `
     <form method="dialog" id="edit-task-form">
        <label for="title">Title</label><br>
        <input type="text" id="updated-title" value=${task.title}><br>
@@ -134,6 +144,8 @@ export default class View {
        <button class="submit-task-button" type="submit">Submit</button>
       </form>
     `;
+
+    task.append(editTaskContainer);
   }
 
   // Talk to controller / pass data to handlers  ------------------------------
@@ -215,6 +227,7 @@ export default class View {
     <button class="edit-task-button">Edit</button>
     `;
 
+    this.renderEditTaskInput(newTaskCard);
     this.mainContent.append(newTaskCard);
   }
 
@@ -231,7 +244,7 @@ export default class View {
       <p class="task-card-priority">${task.priority}</p>
       <button class="edit-task-button">Edit</button>
       `;
-
+      this.renderEditTaskInput(taskCard);
       this.mainContent.append(taskCard);
     });
   }
@@ -343,49 +356,16 @@ export default class View {
     });
   }
 
-  // initOpenModalButton() {
-  //   const openModalButton = document.querySelectorAll('[data-modal-target]');
+  initEditTaskButton() {
+    const editTaskButton = document.querySelector('.edit-task-button');
 
-  //   openModalButton.forEach((button) => {
-  //     button.addEventListener('click', () => {
-  //       console.log('roobussss');
-  //       const modal = document.querySelector(button.dataset.modalTarget);
-  //       this.openEditModal(modal);
-  //     });
-  //   });
-  // }
-
-  // initCloseModalButton() {
-  //   const overlay = document.getElementById('overlay');
-
-  //   overlay.addEventListener('click', (modal) => {
-  //     const openModals = document.querySelectorAll('.modal.active');
-
-  //     openModals.forEach((modal) => {
-  //       this.closeModal(modal);
-  //     });
-  //   });
-  // }
+    // How to open
+    editTaskButton.addEventListener('click', this.toggleEditTaskInput);
+  }
 
   initSaveButton() {
     const saveButton = document.querySelector('.save-button');
     const taskId = saveButton.dataset.id;
     saveButton.addEventListener('click');
   }
-
-  // // Edit task modal
-  // openEditModal(modal) {
-  //   if (modal == null) return;
-
-  //   modal.classList.add('active');
-  //   overlay.classList.add('active');
-  // }
-
-  // closeModal(modal) {
-  //   if (modal == null) return;
-
-  //   modal.classList.remove('active');
-  //   overlay.classList.remove('active');
-  //   // call app.handleEditTaskView()?
-  // }
 }
