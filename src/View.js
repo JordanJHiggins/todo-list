@@ -184,13 +184,17 @@ export default class View {
     const newTaskCard = this.createElement('div', 'task-card');
     newTaskCard.id = task.id;
     newTaskCard.innerHTML += `
-    <p class='task-card-title' contenteditable='true'>${task.title}<button class="delete-task-button">X</button></p>
-    <p class='task-card-desc' contenteditable='true'>${task.desc}</p>
+    <p class='task-card-title'>${task.title}<button class="delete-task-button">X</button></p>
+    <p class='task-card-desc'>${task.desc}</p>
     <input class='task-card-date' type='date' value='${task.dueDate}'></p>
-    <p class="task-card-priority" contenteditable="true">${task.priority}</p>
+    <p class="task-card-priority" >${task.priority}</p>
+
     <button data-modal-target="#modal">Edit</button>
-    <div class="modal" id="modal">modal stuff
-    <button data-close-button class="close-button">x</button>
+    <div class="modal" id="modal" data-id=${newTaskCard.id}>
+    <p class='updated-task-title' contenteditable='true'>${task.title}<button class="delete-task-button">X</button></p>
+    <p class='updated-task-desc' contenteditable='true'>${task.desc}</p>
+    <input class='updated-task-date' type='date' value='${task.dueDate}'></p>
+    <p class="updated-task-priority" contenteditable="true">${task.priority}</p>
     </div>
     <div id="overlay"></div>
     `;
@@ -207,14 +211,22 @@ export default class View {
       const taskCard = this.createElement('div', 'task-card');
       taskCard.id = task.id;
       taskCard.innerHTML = `
-      <p class='task-card-title' contenteditable='true'>${task.title}</p>
-      <p class='task-card-desc' contenteditable='true'>${task.desc}</p>
+      <p class='task-card-title'>${task.title}</p>
+      <p class='task-card-desc'>${task.desc}</p>
       <input class='task-card-date' type='date' value='${task.dueDate}'></input>
-      <p class="task-card-priority contenteditable="true">${task.priority}</p>
+      <p class="task-card-priority >${task.priority}</p>
       <button data-modal-target="#modal">Edit</button>
-      <div class= "modal" id="modal">modal stuff</div>`;
+      <div class= "modal" id="modal">
+      <p class='task-card-title' contenteditable='true'>${task.title}<button class="delete-task-button">X</button></p>
+      <p class='task-card-desc' contenteditable='true'>${task.desc}</p>
+      <input class='task-card-date' type='date' value='${task.dueDate}'></p>
+      <p class="task-card-priority" contenteditable="true">${task.priority}</p>
+      </div>
+      <div id="overlay"></div>`;
 
       this.mainContent.append(taskCard);
+      this.initOpenModalButton();
+      this.initOverlay();
     });
   }
 
@@ -223,9 +235,16 @@ export default class View {
 
     const editTaskView = this.createElement('div');
     editTaskView.id = 'modal';
-    editTaskView.innerHTML = `Issa modal`;
+    editTaskView.innerHTML = ` <button data-modal-target="#modal">Edit</button>
+    <div class= "modal" id="modal">
+    <p class='task-card-title' contenteditable='true'>${task.title}<button class="delete-task-button">X</button></p>
+    <p class='task-card-desc' contenteditable='true'>${task.desc}</p>
+    <input class='task-card-date' type='date' value='${task.dueDate}'></p>
+    <p class="task-card-priority" contenteditable="true">${task.priority}</p>
+    </div>
+    <div id="overlay"></div>`;
 
-    this.taskCard.appendChild(editTaskView);
+    this.taskCardContainer.appendChild(editTaskView);
   }
 
   renderProjectTab(projectID) {
@@ -279,40 +298,40 @@ export default class View {
   }
 
   editTaskTitle(currentProject) {
-    const taskCardTitle = document.querySelector('.task-card-title');
+    const taskCardTitle = document.querySelector('.updated-task-title');
 
     taskCardTitle.addEventListener('input', (e) => {
-      const taskID = e.target.parentNode.id;
+      const taskID = e.target.parentNode.dataset.id;
       const updatedTitle = e.target.innerText;
       app.handleEditTaskTitle(currentProject, taskID, updatedTitle);
     });
   }
 
   editDesc(currentProject) {
-    const taskCardDesc = document.querySelector('.task-card-desc');
+    const taskCardDesc = document.querySelector('.updated-task-desc');
 
     taskCardDesc.addEventListener('input', (e) => {
-      const taskID = e.target.parentNode.id;
+      const taskID = e.target.parentNode.dataset.id;
       const updatedDesc = e.target.innerText;
       app.handleEditDesc(currentProject, taskID, updatedDesc);
     });
   }
 
   editDueDate(currentProject) {
-    const taskDueDate = document.querySelector('.task-card-date');
+    const taskDueDate = document.querySelector('.updated-task-date');
 
     taskDueDate.addEventListener('change', (e) => {
-      const taskID = e.target.parentNode.id;
+      const taskID = e.target.parentNode.dataset.id;
       const updatedDueDate = e.target.value;
       app.handleEditDueDate(currentProject, taskID, updatedDueDate);
     });
   }
 
   editPriority(currentProject) {
-    const taskPriority = document.querySelector('.task-card-priority');
+    const taskPriority = document.querySelector('.updated-task-priority');
 
     taskPriority.addEventListener('input', (e) => {
-      const taskID = e.target.parentNode.id;
+      const taskID = e.target.parentNode.dataset.id;
       const updatedPriority = e.target.value;
       app.handleEditPriority(currentProject, taskID, updatedPriority);
     });
@@ -355,5 +374,6 @@ export default class View {
 
     modal.classList.remove('active');
     overlay.classList.remove('active');
+    // call app.handleEditTaskView()?
   }
 }
