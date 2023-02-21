@@ -96,6 +96,7 @@ export default class View {
     modal.style.display = 'none';
   }
 
+  // Takes an html element as parameter
   clearProjectView(content) {
     while (content.hasChildNodes()) {
       content.removeChild(content.firstChild);
@@ -109,6 +110,7 @@ export default class View {
     taskCard.append(datePicker);
   }
 
+  // Form when adding a new task
   renderTaskInput(project) {
     const addTaskContainer = this.createElement('div', 'add-task-container');
     addTaskContainer.style.display = 'none';
@@ -128,20 +130,21 @@ export default class View {
     this.initSubmitTaskButton();
   }
 
-  renderEditTaskInput(task) {
+  // Form when editing a task
+  renderEditTaskInput(task, taskTitle, taskDesc, taskDueDate, taskPriority) {
     const editTaskContainer = this.createElement('div', 'edit-task-container');
     editTaskContainer.id = task.id;
     editTaskContainer.style.display = 'none';
     editTaskContainer.innerHTML = `
     <form method="dialog" id=${task.id}>
        <label for="title">Title</label><br>
-       <input type="text" class="updated-task-title" id="updated-title" placeholder=${task.title}><br>
+       <input type="text" class="updated-task-title" id="updated-title" value=${taskTitle}><br>
        <label for="desc">Description</label><br>
-       <input type="text" id="desc-input"><br>
+       <input type="text" id="desc-input" value=${taskDesc}><br>
        <label for="due-date">Due Date</label><br>
-       <input type="date" id="date-input"><br>
+       <input type="date" id="date-input" value=${taskDueDate}><br>
        <label for="priority"> Priority</><br>
-       <input type="text" id="priority-input"><br>
+       <input type="text" id="priority-input" value=${taskPriority}><br>
        <button class="save-updates" type="submit">save</button>
       </form>
     `;
@@ -224,11 +227,17 @@ export default class View {
     <p class='task-card-title'>${task.title}<button class="delete-task-button">X</button></p>
     <p class='task-card-desc'>${task.desc}</p>
     <input class='task-card-date' type='date' value='${task.dueDate}'></p>
-    <p class="task-card-priority" >${task.priority}</p>
+    <p class="task-card-priority">${task.priority}</p>
     <button class="edit-task-button">Edit</button>
     `;
 
-    this.renderEditTaskInput(newTaskCard);
+    this.renderEditTaskInput(
+      newTaskCard,
+      task.title,
+      task.desc,
+      task.dueDate,
+      task.priority
+    );
     this.mainContent.append(newTaskCard);
   }
 
@@ -245,26 +254,15 @@ export default class View {
       <p class="task-card-priority">${task.priority}</p>
       <button class="edit-task-button">Edit</button>
       `;
-      this.renderEditTaskInput(taskCard);
+      this.renderEditTaskInput(
+        taskCard,
+        task.title,
+        task.desc,
+        task.dueDate,
+        task.priority
+      );
       this.mainContent.append(taskCard);
     });
-  }
-
-  renderTaskEditView() {
-    const taskCard = document.querySelector('.task-card');
-
-    const editTaskView = this.createElement('div');
-    editTaskView.id = 'modal';
-    editTaskView.innerHTML = ` <button data-modal-target="#modal">Edit</button>
-    <div class= "modal" id="modal">
-    <p class='task-card-title' contenteditable='true'>${task.title}<button class="delete-task-button">X</button></p>
-    <p class='task-card-desc' contenteditable='true'>${task.desc}</p>
-    <input class='task-card-date' type='date' value='${task.dueDate}'></p>
-    <p class="task-card-priority" contenteditable="true">${task.priority}</p>
-    </div>
-    <div id="overlay"></div>`;
-
-    this.taskCardContainer.appendChild(editTaskView);
   }
 
   renderProjectTab(projectID) {
@@ -321,7 +319,7 @@ export default class View {
     const saveButton = document.querySelector('.save-updates');
     const taskCardTitle = document.querySelector('.updated-task-title');
 
-    taskCardTitle.addEventListener('change', (e) => {
+    taskCardTitle.addEventListener('focusout', (e) => {
       const taskID = e.target.parentNode.id;
       const updatedTitle = e.target.value;
 
@@ -362,14 +360,14 @@ export default class View {
   initEditTaskButton() {
     const editTaskButton = document.querySelector('.edit-task-button');
 
-    // How to open
+    // Need to loop over all edit buttons
     editTaskButton.addEventListener('click', this.toggleEditTaskInput);
   }
 
+  // Gets called in controller, handleEditTask. currentProject passed there.
   initSaveButton(currentProject) {
     const saveButton = document.querySelector('.save-updates');
     saveButton.addEventListener('click', () => {
-      // on save button click render tasks again.
       app.view.renderTasks(currentProject);
     });
   }
