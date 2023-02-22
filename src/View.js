@@ -230,51 +230,58 @@ export default class View {
   }
 
   renderNewTask(task) {
+    const taskCard = this.createTaskCard(task);
+    document.querySelector('.task-container').append(taskCard);
+  }
+
+  // Renders all tasks in a project and appends them to the task container
+  renderTasks(project) {
     const taskContainer = document.querySelector('.task-container');
-    const newTaskCard = this.createElement('div', 'task-card');
-    newTaskCard.id = task.id;
-    newTaskCard.innerHTML += `
-    <p class='task-card-title'>${task.title}<button class="delete-task-button">X</button></p>
-    <p class='task-card-desc'>${task.desc}</p>
-    <input class='task-card-date' type='date' value='${task.dueDate}'></p>
-    <p class="task-card-priority">${task.priority}</p>
-    <button class="edit-task-button">Edit</button>
-    `;
+    project.tasks.forEach((task) => {
+      const taskCard = this.createTaskCard(task);
+      taskContainer.append(taskCard);
+    });
+  }
+
+  // Creates a new task card element with the given task data
+  createTaskCard(task) {
+    const taskCard = document.createElement('div', 'task-card');
+    taskCard.id = task.id;
+
+    const title = document.createElement('p', 'task-card-title ');
+    title.textContent = task.title;
+    taskCard.append(title);
+
+    const deleteButton = document.createElement('button', 'delete-task-button');
+    deleteButton.textContent = 'X';
+    title.append(deleteButton);
+
+    const desc = document.createElement('p', 'task-card-desc');
+    desc.textContent = task.desc;
+    taskCard.append(desc);
+
+    const date = document.createElement('input', 'task-card-date');
+    date.type = 'date';
+    date.value = task.dueDate;
+    taskCard.append(date);
+
+    const priority = document.createElement('p', 'task-card-priority');
+    priority.textContent = task.priority;
+    taskCard.append(priority);
+
+    const editButton = document.createElement('button', 'edit-task-button');
+    editButton.textContent = 'Edit';
+    taskCard.append(editButton);
 
     this.renderEditTaskInput(
-      newTaskCard,
+      taskCard,
       task.title,
       task.desc,
       task.dueDate,
       task.priority
     );
-    taskContainer.append(newTaskCard);
-  }
 
-  // Rebuilds task list on project tab switch
-  renderTasks(project) {
-    //How to check for duplicate task before rendering all tasks in projects array.
-    project.tasks.forEach((task) => {
-      const taskContainer = document.querySelector('.task-container');
-      const taskCard = this.createElement('div', 'task-card');
-      taskCard.id = task.id;
-      taskCard.innerHTML = `
-      <p class='task-card-title'>${task.title}</p>
-      <p class='task-card-desc'>${task.desc}</p>
-      <input class='task-card-date' type='date' value='${task.dueDate}'></input>
-      <p class="task-card-priority">${task.priority}</p>
-      <button class="edit-task-button">Edit</button>
-      `;
-      this.renderEditTaskInput(
-        taskCard,
-        task.title,
-        task.desc,
-        task.dueDate,
-        task.priority
-      );
-      // taskContainer is created in renderTabbedProjectView.
-      taskContainer.append(taskCard);
-    });
+    return taskCard;
   }
 
   renderProjectTab(projectID) {
