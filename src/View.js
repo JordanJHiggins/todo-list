@@ -103,6 +103,14 @@ export default class View {
     }
   }
 
+  clearTask(el) {
+    if (el.classList.contains('delete-task')) {
+      // Selects outer most parent of save button (task-card)
+      el.parentElement.parentElement.parentElement.remove();
+    }
+    console.log('yo');
+  }
+
   openDateInput(taskCard) {
     const datePicker = this.createElement('input', 'date-picker');
     datePicker.setAttribute('type', 'date');
@@ -140,10 +148,10 @@ export default class View {
        <label for="title">Title</label><br>
        <input type="text" class="updated-task-title" id="updated-title" value=${taskTitle}><br>
        <label for="desc">Description</label><br>
-       <input type="text" id="desc-input" value=${taskDesc}><br>
+       <input type="text" class="updated-task-desc"id="desc-input" value=${taskDesc}><br>
        <label for="due-date">Due Date</label><br>
        <input type="date" id="date-input" value=${taskDueDate}><br>
-       <label for="priority"> Priority</><br>
+       <label for="priority"> Priority</label><br>
        <input type="text" id="priority-input" value=${taskPriority}><br>
        <button class="save-updates" type="submit">save</button>
       </form>
@@ -199,8 +207,6 @@ export default class View {
     projectView.append(projectTitle, addTaskButton);
     this.mainContent.append(projectView);
 
-    // this.showAddTaskInput(projectView);
-    // this.renderProjectTab(projectTitle.id);
     this.initProjectTabButton();
   }
 
@@ -214,13 +220,17 @@ export default class View {
     const addTaskButton = this.createElement('button', 'add-task-button');
     addTaskButton.textContent = 'Add Task';
 
+    const taskContainer = this.createElement('div', 'task-container');
+    taskContainer.id = projectID;
+
     projectView.append(projectTitle, addTaskButton);
-    this.mainContent.append(projectView);
+    this.mainContent.append(projectView, taskContainer);
 
     this.renderTaskInput(projectView);
   }
 
   renderNewTask(task) {
+    const taskContainer = document.querySelector('.task-container');
     const newTaskCard = this.createElement('div', 'task-card');
     newTaskCard.id = task.id;
     newTaskCard.innerHTML += `
@@ -238,13 +248,14 @@ export default class View {
       task.dueDate,
       task.priority
     );
-    this.mainContent.append(newTaskCard);
+    taskContainer.append(newTaskCard);
   }
 
   // Rebuilds task list on project tab switch
   renderTasks(project) {
     //How to check for duplicate task before rendering all tasks in projects array.
     project.tasks.forEach((task) => {
+      const taskContainer = document.querySelector('.task-container');
       const taskCard = this.createElement('div', 'task-card');
       taskCard.id = task.id;
       taskCard.innerHTML = `
@@ -261,7 +272,8 @@ export default class View {
         task.dueDate,
         task.priority
       );
-      this.mainContent.append(taskCard);
+      // taskContainer is created in renderTabbedProjectView.
+      taskContainer.append(taskCard);
     });
   }
 
@@ -315,24 +327,31 @@ export default class View {
     submitTaskButton.addEventListener('click', this.submitNewTask);
   }
 
+  // ONE EVENT LISTENER FOR ALL INPUTS?
   editTaskTitle(currentProject) {
+    // How to query save button just once?
     const saveButton = document.querySelector('.save-updates');
     const taskCardTitle = document.querySelector('.updated-task-title');
 
-    taskCardTitle.addEventListener('focusout', (e) => {
+    // listen for click event on save button, pass taskCardTitle.value as updatedTitle
+    saveButton.addEventListener('click', (e) => {
       const taskID = e.target.parentNode.id;
-      const updatedTitle = e.target.value;
-
+      const updatedTitle = taskCardTitle.value;
+      // taskCardTitle.value?^^
+      console.log(updatedTitle);
       app.handleEditTaskTitle(currentProject, taskID, updatedTitle);
+      this.clearTasks();
     });
   }
 
   editDesc(currentProject) {
+    const saveButton = document.querySelector('.save-updates');
     const taskCardDesc = document.querySelector('.updated-task-desc');
 
-    taskCardDesc.addEventListener('input', (e) => {
+    taskCardDesc.addEventListener('focusout', (e) => {
       const taskID = e.target.parentNode.id;
       const updatedDesc = e.target.value;
+      console.log(updatedDesc);
       app.handleEditDesc(currentProject, taskID, updatedDesc);
     });
   }
@@ -367,7 +386,10 @@ export default class View {
   // Gets called in controller, handleEditTask. currentProject passed there.
   initSaveButton(currentProject) {
     const saveButton = document.querySelector('.save-updates');
-    saveButton.addEventListener('click', () => {
+    saveButton.addEventListener('click', (e) => {
+      e.target.classList.add('delete-task');
+
+      this.clearTask(e.target);
       app.view.renderTasks(currentProject);
     });
   }
