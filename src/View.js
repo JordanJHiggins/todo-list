@@ -83,7 +83,7 @@ export default class View {
     }
   }
 
-  toggleEditTaskInput() {
+  toggleEditTaskInput(taskID) {
     const editTaskContainer = document.querySelector('.edit-task-container');
 
     if (editTaskContainer.style.display === 'none') {
@@ -113,7 +113,7 @@ export default class View {
   }
 
   deleteTaskCard() {
-    document.querySelectorAll('.task-card').forEach((task) => task.remove());
+    document.querySelectorAll('.delete-task').forEach((task) => task.remove());
   }
 
   openDateInput(taskCard) {
@@ -275,6 +275,7 @@ export default class View {
 
     const editButton = this.createElement('button', 'edit-task-button');
     editButton.textContent = 'Edit';
+    editButton.id = task.id;
     taskCard.append(editButton);
 
     const deleteButton = this.createElement('button', 'delete-task-button');
@@ -354,10 +355,20 @@ export default class View {
   }
 
   initEditTaskButton() {
-    const editTaskButton = document.querySelector('.edit-task-button');
+    const editTaskButton = document.querySelectorAll('.edit-task-button');
 
     // Need to loop over all edit buttons
-    editTaskButton.addEventListener('click', this.toggleEditTaskInput);
+    editTaskButton.forEach((button) => {
+      button.addEventListener('click', (e) => {
+        const currentTask = e.target.id;
+        const taskID = e.target.parentNode.id;
+
+        if (currentTask === taskID) {
+          console.log('bing');
+          app.handleOpenEditTaskForm(currentTask, taskID);
+        }
+      });
+    });
   }
 
   // Gets called in controller, handleEditTask. currentProject passed there.
@@ -378,13 +389,13 @@ export default class View {
 
     deleteTaskButton.forEach((button) => {
       button.addEventListener('click', (e) => {
-        const taskId = e.target.parentNode.id;
-        const deletedTask = e.target;
+        const taskID = e.target.parentNode.id;
+        const deletedTask = document.getElementById(taskID);
 
         // Select taskCard without relying on dom structure?
-        e.target.parentNode.classList.add('delete-task');
+        deletedTask.classList.add('delete-task');
 
-        app.handleDeleteTask(deletedTask, taskId, currentProject);
+        app.handleDeleteTask(deletedTask, taskID, currentProject);
       });
     });
   }
