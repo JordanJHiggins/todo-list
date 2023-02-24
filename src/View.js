@@ -83,13 +83,13 @@ export default class View {
     }
   }
 
-  toggleEditTaskInput(taskID) {
-    const editTaskContainer = document.querySelector('.edit-task-container');
+  toggleEditTaskInput(task) {
+    const editTaskContainer = task.querySelector('.edit-task-container');
 
     if (editTaskContainer.style.display === 'none') {
       editTaskContainer.style.display = 'block';
     } else {
-      editTaskContainer.style.display = 'none';
+      editTaskcontainer.style.display = 'none';
     }
   }
 
@@ -273,14 +273,14 @@ export default class View {
     priority.textContent = task.priority;
     taskCard.append(priority);
 
+    const deleteButton = this.createElement('button', 'delete-task-button');
+    deleteButton.textContent = 'X';
+    taskCard.append(deleteButton);
+
     const editButton = this.createElement('button', 'edit-task-button');
     editButton.textContent = 'Edit';
     editButton.id = task.id;
     taskCard.append(editButton);
-
-    const deleteButton = this.createElement('button', 'delete-task-button');
-    deleteButton.textContent = 'X';
-    taskCard.append(deleteButton);
 
     this.renderEditTaskInput(
       taskCard,
@@ -355,20 +355,19 @@ export default class View {
   }
 
   initEditTaskButton() {
-    const editTaskButton = document.querySelectorAll('.edit-task-button');
-
+    const taskCards = document.querySelectorAll('.task-card');
     // Need to loop over all edit buttons
-    editTaskButton.forEach((button) => {
-      button.addEventListener('click', (e) => {
-        const currentTask = e.target.id;
-        const taskID = e.target.parentNode.id;
 
-        if (currentTask === taskID) {
-          console.log('bing');
-          app.handleOpenEditTaskForm(currentTask, taskID);
+    taskCards.forEach((taskcard) =>
+      taskcard.addEventListener('click', (e) => {
+        if (e.target.classList.contains('edit-task-button')) {
+          const taskID = e.target.parentNode.id;
+          const currentTask = document.getElementById(taskID);
+
+          app.handleOpenEditTaskForm(currentTask);
         }
-      });
-    });
+      })
+    );
   }
 
   // Gets called in controller, handleEditTask. currentProject passed there.
