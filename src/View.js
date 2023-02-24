@@ -104,12 +104,16 @@ export default class View {
     }
   }
 
-  clearTask(el) {
-    if (el.classList.contains('delete-task')) {
+  clearTaskList(el) {
+    if (el.classList.contains('clear-task')) {
       // Selects outer most parent of save button (task-card)
       el.parentElement.parentElement.parentElement.remove();
     }
     console.log('yo');
+  }
+
+  deleteTaskCard() {
+    document.querySelectorAll('.task-card').forEach((task) => task.remove());
   }
 
   openDateInput(taskCard) {
@@ -363,9 +367,25 @@ export default class View {
     saveButton.addEventListener('click', (e) => {
       const currentTask = e.target;
 
-      e.target.classList.add('delete-task');
+      e.target.classList.add('clear-task');
 
       app.handleSaveTaskUpdates(currentProject, currentTask);
+    });
+  }
+
+  initDeleteTaskButton(currentProject) {
+    const deleteTaskButton = document.querySelectorAll('.delete-task-button');
+
+    deleteTaskButton.forEach((button) => {
+      button.addEventListener('click', (e) => {
+        const taskId = e.target.parentNode.id;
+        const deletedTask = e.target;
+
+        // Select taskCard without relying on dom structure?
+        e.target.parentNode.classList.add('delete-task');
+
+        app.handleDeleteTask(deletedTask, taskId, currentProject);
+      });
     });
   }
 }
