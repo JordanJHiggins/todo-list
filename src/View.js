@@ -139,6 +139,7 @@ export default class View {
     this.initSubmitTaskButton();
   }
 
+  createEditTaskForm() {}
   // Form when editing a task
   renderEditTaskInput(task, taskTitle, taskDesc, taskDueDate, taskPriority) {
     const editTaskContainer = this.createElement('div', 'edit-task-container');
@@ -238,6 +239,8 @@ export default class View {
   // Renders all tasks in a project and appends them to the task container
   renderTasks(project) {
     const taskContainer = document.querySelector('.task-container');
+    taskContainer.innerHTML = '';
+
     project.tasks.forEach((task) => {
       const taskCard = this.createTaskCard(task);
       taskContainer.append(taskCard);
@@ -335,8 +338,6 @@ export default class View {
     submitTaskButton.addEventListener('click', this.submitNewTask);
   }
 
-  // ONE EVENT LISTENER FOR ALL INPUTS?
-
   initEditTaskInput(currentProject) {
     const editTaskForm = document.querySelector('.edit-task-form');
 
@@ -358,13 +359,13 @@ export default class View {
   // Gets called in controller, handleEditTask. currentProject passed there.
   initSaveButton(currentProject) {
     const saveButton = document.querySelector('.save-updates');
+
     saveButton.addEventListener('click', (e) => {
+      const currentTask = e.target;
+
       e.target.classList.add('delete-task');
 
-      this.clearTask(e.target);
-      app.view.renderTasks(currentProject);
+      app.handleSaveTaskUpdates(currentProject, currentTask);
     });
   }
-
-  initDeleteButton;
 }
