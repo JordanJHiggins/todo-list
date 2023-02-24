@@ -62,6 +62,7 @@ export default class View {
     this.addProjectInput = '';
   }
 
+  //  Toggle a class of hide on these method with "classList.toggle()"?
   toggleProjectModal() {
     const addProjectModal = document.querySelector('.add-project-modal');
 
@@ -144,7 +145,7 @@ export default class View {
     editTaskContainer.id = task.id;
     editTaskContainer.style.display = 'none';
     editTaskContainer.innerHTML = `
-    <form method="dialog" id=${task.id}>
+    <form method="dialog" class="edit-task-form" id=${task.id}>
        <label for="title">Title</label><br>
        <input type="text" class="updated-task-title" id="updated-title" value=${taskTitle}><br>
        <label for="desc">Description</label><br>
@@ -245,33 +246,33 @@ export default class View {
 
   // Creates a new task card element with the given task data
   createTaskCard(task) {
-    const taskCard = document.createElement('div', 'task-card');
+    const taskCard = this.createElement('div', 'task-card');
     taskCard.id = task.id;
 
-    const title = document.createElement('p', 'task-card-title ');
+    const title = this.createElement('p', 'task-card-title');
     title.textContent = task.title;
     taskCard.append(title);
 
-    const deleteButton = document.createElement('button', 'delete-task-button');
-    deleteButton.textContent = 'X';
-    title.append(deleteButton);
-
-    const desc = document.createElement('p', 'task-card-desc');
+    const desc = this.createElement('p', 'task-card-desc');
     desc.textContent = task.desc;
     taskCard.append(desc);
 
-    const date = document.createElement('input', 'task-card-date');
+    const date = this.createElement('input', 'task-card-date');
     date.type = 'date';
     date.value = task.dueDate;
     taskCard.append(date);
 
-    const priority = document.createElement('p', 'task-card-priority');
+    const priority = this.createElement('p', 'task-card-priority');
     priority.textContent = task.priority;
     taskCard.append(priority);
 
-    const editButton = document.createElement('button', 'edit-task-button');
+    const editButton = this.createElement('button', 'edit-task-button');
     editButton.textContent = 'Edit';
     taskCard.append(editButton);
+
+    const deleteButton = this.createElement('button', 'delete-task-button');
+    deleteButton.textContent = 'X';
+    taskCard.append(deleteButton);
 
     this.renderEditTaskInput(
       taskCard,
@@ -335,51 +336,15 @@ export default class View {
   }
 
   // ONE EVENT LISTENER FOR ALL INPUTS?
-  editTaskTitle(currentProject) {
-    // How to query save button just once?
-    const saveButton = document.querySelector('.save-updates');
-    const taskCardTitle = document.querySelector('.updated-task-title');
 
-    // listen for click event on save button, pass taskCardTitle.value as updatedTitle
-    saveButton.addEventListener('click', (e) => {
+  initEditTaskInput(currentProject) {
+    const editTaskForm = document.querySelector('.edit-task-form');
+
+    editTaskForm.addEventListener('input', (e) => {
       const taskID = e.target.parentNode.id;
-      const updatedTitle = taskCardTitle.value;
-      // taskCardTitle.value?^^
-      console.log(updatedTitle);
-      app.handleEditTaskTitle(currentProject, taskID, updatedTitle);
-      this.clearTasks();
-    });
-  }
-
-  editDesc(currentProject) {
-    const saveButton = document.querySelector('.save-updates');
-    const taskCardDesc = document.querySelector('.updated-task-desc');
-
-    taskCardDesc.addEventListener('focusout', (e) => {
-      const taskID = e.target.parentNode.id;
-      const updatedDesc = e.target.value;
-      console.log(updatedDesc);
-      app.handleEditDesc(currentProject, taskID, updatedDesc);
-    });
-  }
-
-  editDueDate(currentProject) {
-    const taskDueDate = document.querySelector('.updated-task-date');
-
-    taskDueDate.addEventListener('change', (e) => {
-      const taskID = e.target.parentNode.dataset.id;
-      const updatedDueDate = e.target.value;
-      app.handleEditDueDate(currentProject, taskID, updatedDueDate);
-    });
-  }
-
-  editPriority(currentProject) {
-    const taskPriority = document.querySelector('.updated-task-priority');
-
-    taskPriority.addEventListener('input', (e) => {
-      const taskID = e.target.parentNode.dataset.id;
-      const updatedPriority = e.target.value;
-      app.handleEditPriority(currentProject, taskID, updatedPriority);
+      const updatedValue = e.target.value;
+      const property = e.target;
+      app.handleEditTask(currentProject, taskID, updatedValue, property);
     });
   }
 
@@ -400,4 +365,6 @@ export default class View {
       app.view.renderTasks(currentProject);
     });
   }
+
+  initDeleteButton;
 }

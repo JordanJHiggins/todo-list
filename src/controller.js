@@ -30,59 +30,76 @@ export default class Controller {
     app.view.renderTasks(tabbedProject);
     app.view.initAddTaskButton();
     app.view.initEditTaskButton();
-
-    app.view.editTaskTitle(tabbedProject);
-    app.view.editDesc(tabbedProject);
-    app.view.editDueDate(tabbedProject);
+    app.view.initEditTaskInput(tabbedProject);
   };
+
+  findProject(projectID) {
+    const project = app.todoList.findProject(projectID);
+
+    return project;
+  }
 
   handleAddTask = (projectID, title, desc, dueDate, priority) => {
     const newTask = new Task(title, desc, dueDate, priority);
 
-    const currentProject = app.todoList.findProject(projectID);
+    const currentProject = this.findProject(projectID);
 
     currentProject.addTask(newTask);
     app.view.renderNewTask(newTask);
     app.view.initEditTaskButton();
-    app.view.editTaskTitle(currentProject);
-    app.view.editDesc(currentProject);
-    app.view.editDueDate(currentProject);
+    app.view.initEditTaskInput(currentProject);
   };
 
-  handleEditTaskView = (projectID) => {
-    // call rerender task when submitting edited task?
-  };
+  handleDeleteTask(projectID, taskID) {
+    const currentProject = this.findProject(projectID);
 
-  handleEditTaskTitle = (currentProject, taskID, data) => {
+    currentProject.removeTask(taskID);
+  }
+
+  handleEditTask(currentProject, taskID, updatedValue, property) {
+    if (property.classList.contains('updated-task-title')) {
+      console.log('update dat title');
+      this.handleEditTaskTitle(currentProject, taskID, updatedValue);
+    } else if (property.classList.contains('updated-task-desc')) {
+      this.handleEditDesc(currentProject, taskID, updatedValue);
+    } else if (property.classList.contains('date-input')) {
+      this.handleEditDueDate(currentProject, taskID, updatedValue);
+    } else if (property.classList.contains('updated-task-priority')) {
+      this.handleEditPriority(currentProject, taskID, updatedValue);
+    }
+  }
+
+  handleEditTaskTitle = (currentProject, taskID, updatedValue) => {
     const currentTask = currentProject.findTask(taskID);
 
-    currentProject.updateTask(currentTask.id, { title: data });
+    currentProject.updateTask(currentTask.id, { title: updatedValue });
 
     app.view.initSaveButton(currentProject);
     console.log(currentTask);
   };
 
-  handleEditDesc = (currentProject, taskID, data) => {
+  handleEditDesc = (currentProject, taskID, updatedValue) => {
     const currentTask = currentProject.findTask(taskID);
 
     currentProject.updateTask(currentTask.id, {
-      desc: data,
+      desc: updatedValue,
     });
+    app.view.initSaveButton(currentProject);
     console.log(currentTask);
   };
 
-  handleEditDueDate = (currentProject, taskID, data) => {
+  handleEditDueDate = (currentProject, taskID, updatedValue) => {
     const currentTask = currentProject.findTask(taskID);
 
-    currentProject.updateTask(currentTask.id, { dueDate: data });
+    currentProject.updateTask(currentTask.id, { dueDate: updatedValue });
 
     console.log(currentTask);
   };
 
-  handleEditPriority = (currentProject, taskID, data) => {
+  handleEditPriority = (currentProject, taskID, updatedValue) => {
     const currentTask = currentProject.findTask(taskID);
 
-    currentProject.updateTask(currentTask.id, { priority: data });
+    currentProject.updateTask(currentTask.id, { priority: updatedValue });
 
     console.log(currentTask);
   };
