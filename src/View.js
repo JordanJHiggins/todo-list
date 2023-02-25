@@ -89,7 +89,7 @@ export default class View {
     if (editTaskContainer.style.display === 'none') {
       editTaskContainer.style.display = 'block';
     } else {
-      editTaskcontainer.style.display = 'none';
+      editTaskContainer.style.display = 'none';
     }
   }
 
@@ -121,49 +121,6 @@ export default class View {
     datePicker.setAttribute('type', 'date');
 
     taskCard.append(datePicker);
-  }
-
-  // Form when adding a new task
-  renderTaskInput(project) {
-    const addTaskContainer = this.createElement('div', 'add-task-container');
-    addTaskContainer.style.display = 'none';
-    addTaskContainer.innerHTML = `<form method="dialog" id="task-form">
-       <label for="title">Title</label><br>
-       <input type="text" id="title-input"><br>
-       <label for="desc">Description</label><br>
-       <input type="text" id="desc-input"><br>
-       <label for="due-date">Due Date</label><br>
-       <input type="date" id="date-input"><br>
-       <label for="priority"> Priority</><br>
-       <input type="text" id="priority-input"><br>
-       <button class="submit-task-button" type="submit">Submit</button>
-      </form>`;
-
-    project.append(addTaskContainer);
-    this.initSubmitTaskButton();
-  }
-
-  createEditTaskForm() {}
-  // Form when editing a task
-  renderEditTaskInput(task, taskTitle, taskDesc, taskDueDate, taskPriority) {
-    const editTaskContainer = this.createElement('div', 'edit-task-container');
-    editTaskContainer.id = task.id;
-    editTaskContainer.style.display = 'none';
-    editTaskContainer.innerHTML = `
-    <form method="dialog" class="edit-task-form" id=${task.id}>
-       <label for="title">Title</label><br>
-       <input type="text" class="updated-task-title" id="updated-title" value=${taskTitle}><br>
-       <label for="desc">Description</label><br>
-       <input type="text" class="updated-task-desc"id="desc-input" value=${taskDesc}><br>
-       <label for="due-date">Due Date</label><br>
-       <input type="date" id="date-input" value=${taskDueDate}><br>
-       <label for="priority"> Priority</label><br>
-       <input type="text" id="priority-input" value=${taskPriority}><br>
-       <button class="save-updates" type="submit">save</button>
-      </form>
-    `;
-
-    task.append(editTaskContainer);
   }
 
   // Talk to controller / pass data to handlers  ------------------------------
@@ -301,7 +258,52 @@ export default class View {
     this.sideBar.appendChild(projectTabButton);
   }
 
+  // Form when adding a new task
+  renderTaskInput(project) {
+    const addTaskContainer = this.createElement('div', 'add-task-container');
+    addTaskContainer.style.display = 'none';
+    addTaskContainer.innerHTML = `
+    <form method='dialog' id='task-form'>
+       <label for='title>Title</label><br>
+       <input type='text' id='title-input'><br>
+       <label for="desc">Description</label><br>
+       <input type='text' id='desc-input'><br>
+       <label for='due-date'>Due Date</label><br>
+       <input type='date' id='date-input'><br>
+       <label for='priority'> Priority</><br>
+       <input type='text' id='priority-input'><br>
+       <button class='submit-task-button' type='submit'>Submit</button>
+      </form>`;
+
+    project.append(addTaskContainer);
+    this.initSubmitTaskButton();
+  }
+  a;
+  // Form when editing a task
+  renderEditTaskInput(task, taskTitle, taskDesc, taskDueDate, taskPriority) {
+    const editTaskContainer = this.createElement('div', 'edit-task-container');
+    editTaskContainer.id = task.id;
+    editTaskContainer.style.display = 'none';
+    editTaskContainer.innerHTML = `
+    <form class='edit-task-form' id='${task.id}'>
+       <label for='title'>Title</label><br>
+       <input type='text' class="updated-task-title" id="updated-title" value=${taskTitle}><br>
+       <label for='desc'>Description</label><br>
+       <input type='text' class='updated-task-desc' id="desc-input" value='${taskDesc}'><br>
+       <label for='due-date'>Due Date</label><br>
+       <input type='date' id='date-input' value='${taskDueDate}'><br>
+       <label for='priority'> Priority</label><br>
+       <input type='text' id='priority-input' value='${taskPriority}'><br>
+       <button class='save-updates'>save</button>
+      à<button class='cancel-edit-button'>Cancel</button>
+      </form>
+    `;
+
+    task.append(editTaskContainer);
+  }
+
   // Event listeners -----------------------------------
+  // Refactor: Listeners should be using event delegation rather than querying individual elements.
   initAddProjectButton() {
     const addProjectButton = document.querySelector('.add-project-button');
 
@@ -356,7 +358,6 @@ export default class View {
 
   initEditTaskButton() {
     const taskCards = document.querySelectorAll('.task-card');
-    // Need to loop over all edit buttons
 
     taskCards.forEach((taskcard) =>
       taskcard.addEventListener('click', (e) => {
@@ -366,6 +367,20 @@ export default class View {
 
           app.handleOpenEditTaskForm(currentTask);
         }
+      })
+    );
+  }
+
+  initCancelEditButton() {
+    const cancelEditTask = document.querySelectorAll('.cancel-edit-button');
+
+    cancelEditTask.forEach((button) =>
+      button.addEventListener('click', (e) => {
+        e.preventDefault();
+        const taskID = e.target.parentNode.parentNode.id;
+        const currentTask = document.getElementById(taskID);
+        console.log(currentTask);
+        app.handleCloseEditTaskForm(currentTask);
       })
     );
   }

@@ -29,8 +29,10 @@ export default class Controller {
     app.view.renderTabbedProjectView(tabbedProject.title, tabbedProject.id);
     app.view.renderTasks(tabbedProject);
     app.view.initAddTaskButton();
-    app.view.initEditTaskButton();
     app.view.initEditTaskInput(tabbedProject);
+    app.view.initDeleteTaskButton(tabbedProject);
+    app.view.initEditTaskButton();
+    app.view.initCancelEditButton();
   };
 
   findProject(projectID) {
@@ -46,19 +48,24 @@ export default class Controller {
 
     currentProject.addTask(newTask);
     app.view.renderNewTask(newTask);
-    app.view.initEditTaskButton();
+
     app.view.initEditTaskInput(currentProject);
+    app.view.initDeleteTaskButton(currentProject);
+    app.view.initEditTaskButton();
+    app.view.initCancelEditButton();
   };
 
-  handleDeleteTask(projectID, taskID) {
-    const currentProject = this.findProject(projectID);
+  handleOpenEditTaskForm(currentTask) {
+    // pass specific task to open edit input on
+    app.view.toggleEditTaskInput(currentTask);
+  }
 
-    currentProject.removeTask(taskID);
+  handleCloseEditTaskForm(currentTask) {
+    app.view.toggleEditTaskInput(currentTask);
   }
 
   handleEditTask(currentProject, taskID, updatedValue, property) {
     if (property.classList.contains('updated-task-title')) {
-      console.log('update dat title');
       this.handleEditTaskTitle(currentProject, taskID, updatedValue);
     } else if (property.classList.contains('updated-task-desc')) {
       this.handleEditDesc(currentProject, taskID, updatedValue);
@@ -100,7 +107,20 @@ export default class Controller {
     const currentTask = currentProject.findTask(taskID);
 
     currentProject.updateTask(currentTask.id, { priority: updatedValue });
-
     console.log(currentTask);
   };
+
+  handleSaveTaskUpdates(currentProject, currentTask) {
+    app.view.clearTaskList(currentTask);
+    app.view.renderTasks(currentProject);
+  }
+
+  handleDeleteTask(deletedTask, taskId, currentProject) {
+    const taskObj = currentProject.findTask(taskId);
+
+    currentProject.removeTask(taskObj);
+    app.view.deleteTaskCard();
+
+    console.log(currentProject);
+  }
 }
