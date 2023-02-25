@@ -81,7 +81,7 @@ export default class Controller {
 
     currentProject.updateTask(currentTask.id, { title: updatedValue });
 
-    app.view.initSaveButton(currentProject);
+    // app.view.initSaveButton(currentProject);
     console.log(currentTask);
   };
 

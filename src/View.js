@@ -62,6 +62,11 @@ export default class View {
     this.addProjectInput = '';
   }
 
+  // clearEditTaskForm() {
+  //   const editTitle = document.querySelector('.updated-task-title');
+  //   editTitle.textContent = '';
+  // }
+
   //  Toggle a class of hide on these method with "classList.toggle()"?
   toggleProjectModal() {
     const addProjectModal = document.querySelector('.add-project-modal');
@@ -205,6 +210,8 @@ export default class View {
     project.tasks.forEach((task) => {
       const taskCard = this.createTaskCard(task);
       taskContainer.append(taskCard);
+      this.initEditTaskButton();
+      this.initEditTaskInput(project);
     });
   }
 
@@ -264,7 +271,7 @@ export default class View {
     addTaskContainer.style.display = 'none';
     addTaskContainer.innerHTML = `
     <form method='dialog' id='task-form'>
-       <label for='title>Title</label><br>
+       <label for='title'>Title</label><br>
        <input type='text' id='title-input'><br>
        <label for="desc">Description</label><br>
        <input type='text' id='desc-input'><br>
@@ -294,8 +301,8 @@ export default class View {
        <input type='date' id='date-input' value='${taskDueDate}'><br>
        <label for='priority'> Priority</label><br>
        <input type='text' id='priority-input' value='${taskPriority}'><br>
-       <button class='save-updates'>save</button>
-      à<button class='cancel-edit-button'>Cancel</button>
+       <button type="button" class='save-updates'>save</button>
+      <button type="button" class='cancel-edit-button'>Cancel</button>
       </form>
     `;
 
@@ -352,6 +359,7 @@ export default class View {
       const taskID = e.target.parentNode.id;
       const updatedValue = e.target.value;
       const property = e.target;
+      this.initSaveButton(currentProject);
       app.handleEditTask(currentProject, taskID, updatedValue, property);
     });
   }
@@ -361,6 +369,7 @@ export default class View {
 
     taskCards.forEach((taskcard) =>
       taskcard.addEventListener('click', (e) => {
+        this.initCancelEditButton();
         if (e.target.classList.contains('edit-task-button')) {
           const taskID = e.target.parentNode.id;
           const currentTask = document.getElementById(taskID);
@@ -390,6 +399,7 @@ export default class View {
     const saveButton = document.querySelector('.save-updates');
 
     saveButton.addEventListener('click', (e) => {
+      e.preventDefault();
       const currentTask = e.target;
 
       e.target.classList.add('clear-task');
