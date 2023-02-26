@@ -13,12 +13,12 @@ export default class Controller {
   // Handler methods...
   handleAddProject = (projectTitle) => {
     const newProject = new Project(projectTitle);
-    app.todoList.addProject(newProject);
 
-    console.log(newProject);
+    app.todoList.addProject(newProject);
 
     app.view.renderProjectTab(newProject.id, projectTitle);
     app.view.initProjectTabButton();
+    // app.view.initDeleteProjectButton(newProject);
   };
 
   // Rerender project view on selector click?
@@ -29,26 +29,18 @@ export default class Controller {
     app.view.renderTabbedProjectView(tabbedProject.title, tabbedProject.id);
     app.view.renderTasks(tabbedProject);
     app.view.initAddTaskButton();
-    app.view.initEditTaskInput(tabbedProject);
+    // app.view.initEditTaskInput(tabbedProject);
     app.view.initDeleteTaskButton(tabbedProject);
-    app.view.initEditTaskButton();
-    app.view.initCancelEditButton();
+    app.view.initDeleteProjectButton(tabbedProject.id);
   };
-
-  findProject(projectID) {
-    const project = app.todoList.findProject(projectID);
-
-    return project;
-  }
 
   handleAddTask = (projectID, title, desc, dueDate, priority) => {
     const newTask = new Task(title, desc, dueDate, priority);
 
     const currentProject = this.findProject(projectID);
-
     currentProject.addTask(newTask);
-    app.view.renderNewTask(newTask);
 
+    app.view.renderNewTask(newTask);
     app.view.initEditTaskInput(currentProject);
     app.view.initDeleteTaskButton(currentProject);
     app.view.initEditTaskButton();
@@ -81,7 +73,7 @@ export default class Controller {
 
     currentProject.updateTask(currentTask.id, { title: updatedValue });
 
-    // app.view.initSaveButton(currentProject);
+    app.view.initSaveButton(currentProject);
     console.log(currentTask);
   };
 
@@ -92,22 +84,18 @@ export default class Controller {
       desc: updatedValue,
     });
     app.view.initSaveButton(currentProject);
-    console.log(currentTask);
   };
 
   handleEditDueDate = (currentProject, taskID, updatedValue) => {
     const currentTask = currentProject.findTask(taskID);
 
     currentProject.updateTask(currentTask.id, { dueDate: updatedValue });
-
-    console.log(currentTask);
   };
 
   handleEditPriority = (currentProject, taskID, updatedValue) => {
     const currentTask = currentProject.findTask(taskID);
 
     currentProject.updateTask(currentTask.id, { priority: updatedValue });
-    console.log(currentTask);
   };
 
   handleSaveTaskUpdates(currentProject, currentTask) {
@@ -120,7 +108,11 @@ export default class Controller {
 
     currentProject.removeTask(taskObj);
     app.view.deleteTaskCard();
+  }
 
-    console.log(currentProject);
+  handleDeleteProject(projectID) {
+    const projectObj = this.todoList.findProject(projectID);
+
+    this.todoList.removeProject(projectObj);
   }
 }

@@ -62,11 +62,6 @@ export default class View {
     this.addProjectInput = '';
   }
 
-  // clearEditTaskForm() {
-  //   const editTitle = document.querySelector('.updated-task-title');
-  //   editTitle.textContent = '';
-  // }
-
   //  Toggle a class of hide on these method with "classList.toggle()"?
   toggleProjectModal() {
     const addProjectModal = document.querySelector('.add-project-modal');
@@ -114,11 +109,26 @@ export default class View {
       // Selects outer most parent of save button (task-card)
       el.parentElement.parentElement.parentElement.remove();
     }
-    console.log('yo');
   }
 
   deleteTaskCard() {
     document.querySelectorAll('.delete-task').forEach((task) => task.remove());
+  }
+
+  deleteProjectSelector(deletedProject) {
+    const projectSelector = document.getElementById(deletedProject);
+
+    if (projectSelector.classList.contains('project-tab-button')) {
+      projectSelector.remove();
+    }
+  }
+
+  // Removes a project-view from dom
+  deleteProjectCard(currentProject) {
+    console.log(currentProject);
+    const deletedProjectCard = document.getElementById(currentProject);
+
+    deletedProjectCard.parentNode.remove();
   }
 
   openDateInput(taskCard) {
@@ -176,10 +186,12 @@ export default class View {
     this.mainContent.append(projectView);
 
     this.initProjectTabButton();
+    this.initDeleteProjectButton(projectID);
   }
 
   renderTabbedProjectView(title, projectID) {
     const projectView = this.createElement('div', 'project-view-container');
+    projectView.id = projectID;
 
     const projectTitle = this.createElement('h2', 'project-title');
     projectTitle.textContent = title;
@@ -188,13 +200,20 @@ export default class View {
     const addTaskButton = this.createElement('button', 'add-task-button');
     addTaskButton.textContent = 'Add Task';
 
+    const deleteProjectButton = this.createElement(
+      'button',
+      'delete-project-button'
+    );
+    deleteProjectButton.textContent = 'Delete Project';
+
     const taskContainer = this.createElement('div', 'task-container');
     taskContainer.id = projectID;
 
-    projectView.append(projectTitle, addTaskButton);
+    projectView.append(projectTitle, addTaskButton, deleteProjectButton);
     this.mainContent.append(projectView, taskContainer);
 
     this.renderTaskInput(projectView);
+    this.initDeleteProjectButton(projectID);
   }
 
   renderNewTask(task) {
@@ -206,16 +225,17 @@ export default class View {
   renderTasks(project) {
     const taskContainer = document.querySelector('.task-container');
     taskContainer.innerHTML = '';
-
     project.tasks.forEach((task) => {
       const taskCard = this.createTaskCard(task);
       taskContainer.append(taskCard);
+      // Create a method that calls and returns these methods?
       this.initEditTaskButton();
       this.initEditTaskInput(project);
+      this.initDeleteTaskButton(project);
     });
   }
 
-  // Creates a new task card element with the given task data
+  // Creates a new task card element with the given task dataa
   createTaskCard(task) {
     const taskCard = this.createElement('div', 'task-card');
     taskCard.id = task.id;
@@ -285,7 +305,6 @@ export default class View {
     project.append(addTaskContainer);
     this.initSubmitTaskButton();
   }
-  a;
   // Form when editing a task
   renderEditTaskInput(task, taskTitle, taskDesc, taskDueDate, taskPriority) {
     const editTaskContainer = this.createElement('div', 'edit-task-container');
@@ -332,8 +351,8 @@ export default class View {
 
     projectTabButtons.forEach((button) =>
       button.addEventListener('click', (e) => {
-        console.log('roobus');
         const buttonID = e.target.id;
+        console.log(buttonID);
         this.changeProjectTab(buttonID);
       })
     );
@@ -369,7 +388,6 @@ export default class View {
 
     taskCards.forEach((taskcard) =>
       taskcard.addEventListener('click', (e) => {
-        this.initCancelEditButton();
         if (e.target.classList.contains('edit-task-button')) {
           const taskID = e.target.parentNode.id;
           const currentTask = document.getElementById(taskID);
@@ -421,6 +439,20 @@ export default class View {
 
         app.handleDeleteTask(deletedTask, taskID, currentProject);
       });
+    });
+  }
+
+  initDeleteProjectButton(projectID) {
+    const projectContainer = document.querySelector('.project-view-container');
+
+    projectContainer.addEventListener('click', (e) => {
+      if (e.target.classList.contains('delete-project-button')) {
+        const deletedProject = e.target.parentNode;
+        deletedProject.remove();
+        //
+        this.deleteProjectSelector(deletedProject.id);
+        this.handleDeleteProject(projectID);
+      }
     });
   }
 }
