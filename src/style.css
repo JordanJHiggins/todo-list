@@ -7,33 +7,61 @@
   margin: 0;
 }
 
+:root {
+  /* Backgrounds */
+  --main-bg-color: #fafaf9;
+  --sidebar-bg-color: #f5f5f4;
+  --header-bg-color: #44403c;
+
+  /* Font*/
+  --light-font-color: #57534e;
+  --med-font-size: 1rem;
+  /* Shadows */
+  --light-shadow: box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;;
+
+  /* Buttons */
+  --button-background:none;
+  --button-border:none;
+  --button-Margin:0;
+  --button-padding:0;
+  --button-cursor: pointer
+ 
+}
+
 html,
 body {
   min-height: 100vh;
-  background-color: darkgray;
+  background-color: var(--main-bg-color);
 }
 
 /* Page structure */
 #grid-wrapper {
   display: grid;
-  grid-template-columns: 1fr 2.5fr;
-  border: solid 3px purple;
+  grid-template-columns: 1fr 2fr;
+  grid-template-rows: 1fr 15fr;
+  /* border: solid 3px purple; */
   min-height: 100vh;
   min-width: 100vw;
+}
+
+.main-header {
+  border: orange solid 1px;
+  background-color: var(--header-bg-color);
+  grid-area: 1 / 1 / 2 / 3;
 }
 
 .main-content {
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  border: solid green 2px;
+  /* border: solid green 2px; */
 }
 
-/* Project Input */
+/* Projects */
 .add-project-modal {
   border: 1px goldenrod solid;
 }
-/* Project card */
+
 .project-card {
   border: solid red 1px;
   min-height: 20vh;
@@ -43,7 +71,39 @@ body {
 
 /* Side bar  */
 .side-bar {
-  border: solid blue 1px;
+  display: flex;
+  align-items: flex-start;
+  flex-direction:column;
+  background-color: var(--sidebar-bg-color);
+  box-shadow: var(--light-shadow);
+  grid-area: 2 / 1 / 3 / 2;
+  /* border: solid blue 1px; */
+}
+
+
+.add-project-container{
+  display: flex;
+  align-items: center;
+  width: 25vw;
+  height: 5vh;
+  border-radius: 7px;
+  margin:0.5rem;
+}
+
+.add-project-container:hover{
+  background-color:rgba(214, 211, 209, 0.5);
+  transition: 0.3s;
+  ;
+}
+
+.add-project-button{
+  padding: 0.5rem;
+  font-size: var(--med-font-size);
+  color: var(--light-font-color);
+  background: var(--button-background);
+  border: var(--button-border);
+  margin: var(--button-Margin);
+  cursor:var(--button-cursor);
 }
 
 /* New Task Modal */
@@ -56,6 +116,7 @@ body {
 }
 .modal::backdrop {
   background: rgba(0, 0, 0, 0.5);
+  transition: 0.3s;
 }
 
 /* Edit Task Modal */
@@ -98,4 +159,13 @@ body {
 /* Task card */
 .task-card {
   border: 1px forestgreen solid;
+}
+
+/* Toggle elements */
+.hide {
+  display: none;
+}
+
+.show {
+  display: block;
 }
