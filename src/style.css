@@ -17,15 +17,14 @@
   --light-font-color: #57534e;
   --med-font-size: 1rem;
   /* Shadows */
-  --light-shadow: box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;;
+  --light-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
 
   /* Buttons */
-  --button-background:none;
-  --button-border:none;
-  --button-Margin:0;
-  --button-padding:0;
-  --button-cursor: pointer
- 
+  --button-background: none;
+  --button-border: none;
+  --button-Margin: 0;
+  --button-padding: 0;
+  --button-cursor: pointer;
 }
 
 html,
@@ -37,6 +36,7 @@ body {
 /* Page structure */
 #grid-wrapper {
   display: grid;
+  /* use calc here? */
   grid-template-columns: 1fr 2fr;
   grid-template-rows: 1fr 15fr;
   /* border: solid 3px purple; */
@@ -71,39 +71,44 @@ body {
 
 /* Side bar  */
 .side-bar {
+  max-width: max(400px, 30%);
   display: flex;
   align-items: flex-start;
-  flex-direction:column;
+  flex-direction: column;
   background-color: var(--sidebar-bg-color);
   box-shadow: var(--light-shadow);
   grid-area: 2 / 1 / 3 / 2;
+
   /* border: solid blue 1px; */
 }
 
-
-.add-project-container{
+.add-project-container,
+.project-tab-container {
   display: flex;
   align-items: center;
-  width: 25vw;
-  height: 5vh;
+  width: 70%;
+  height: min(10%, 30px);
   border-radius: 7px;
-  margin:0.5rem;
+  margin: 0.5rem;
 }
 
-.add-project-container:hover{
-  background-color:rgba(214, 211, 209, 0.5);
+.add-project-container:hover,
+.project-tab-button:hover {
+  background-color: rgba(214, 211, 209, 0.5);
   transition: 0.3s;
-  ;
 }
 
-.add-project-button{
+.add-project-button,
+.project-tab-button {
   padding: 0.5rem;
+  width: 100%;
+  text-align: left;
   font-size: var(--med-font-size);
   color: var(--light-font-color);
   background: var(--button-background);
   border: var(--button-border);
   margin: var(--button-Margin);
-  cursor:var(--button-cursor);
+  cursor: var(--button-cursor);
 }
 
 /* New Task Modal */
