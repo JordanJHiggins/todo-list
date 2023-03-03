@@ -40,15 +40,30 @@ export default class View {
 
     this.addProjectInput = this.createElement('input', 'add-project-input');
 
+    this.projectInputButtons = this.createElement(
+      'div',
+      'project-input-buttons'
+    );
+
     this.projectSubmit = this.createElement('button', 'project-submit');
     this.projectSubmit.type = 'submit';
     this.projectSubmit.textContent = 'Add';
 
+    this.cancelProjectInput = this.createElement(
+      'button',
+      'cancel-project-input'
+    );
+    this.cancelProjectInput.textContent = 'Cancel';
+
+    this.projectInputButtons.append(
+      this.projectSubmit,
+      this.cancelProjectInput
+    );
     // Append project input and buttons to sidebar
     this.addProjectModal.append(
       this.addProjectTitle,
       this.addProjectInput,
-      this.projectSubmit
+      this.projectInputButtons
     );
 
     this.addProjectContainer.append(this.addProjectButton);
@@ -327,14 +342,27 @@ export default class View {
     addTaskContainer.style.display = 'none';
     addTaskContainer.innerHTML = `
     <form method='dialog' id='task-form'>
+    <div class="title-container">
        <label for='title'>Title</label><br>
        <input type='text' id='title-input'><br>
+    </div>
+    <div class="desc-container">
        <label for="desc">Description</label><br>
        <input type='text' id='desc-input'><br>
+    </div>
+    <div class="date-container">
        <label for='due-date'>Due Date</label><br>
        <input type='date' id='date-input'><br>
+    </div>
+    <div class="priority-container">
        <label for='priority'> Priority</><br>
-       <input type='text' id='priority-input'><br>
+       <select name="priority" id='priority-input'>
+       <option value="low">Low</option> 
+       <option value="medium">Medium</option> 
+       <option value="high">High</option>
+       <option value="Urgent">Urgent</option> 
+       </select>
+    </div>
        <button class='submit-task-button' type='submit'>Submit</button>
       </form>`;
 
@@ -376,7 +404,7 @@ export default class View {
     const submitProjectButton = document.querySelector('.project-submit');
 
     submitProjectButton.addEventListener('click', (e) => {
-      const projectModal = e.target.parentNode;
+      const projectModal = e.target.parentNode.parentNode;
       this.submitNewProject();
       this.closeAddProjectModal(projectModal);
     });
@@ -491,6 +519,18 @@ export default class View {
         this.deleteProjectSelector(deletedProject.id);
         // app.handleDeleteProject(projectID);
       }
+    });
+  }
+
+  initCancelProjectInput() {
+    const cancelProjectInputButton = document.querySelector(
+      '.cancel-project-input'
+    );
+
+    cancelProjectInputButton.addEventListener('click', () => {
+      console.log('bing');
+      this.toggleProjectModal();
+      this.clearProjectInput();
     });
   }
 }

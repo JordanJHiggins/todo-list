@@ -15,7 +15,5 @@ window.addEventListener('DOMContentLoaded', (event) => {
   // LOGIC TESTING
   app.view.initAddProjectButton();
   app.view.initSubmitProjectButton();
+  app.view.initCancelProjectInput();
 });
-
-// data format for updating task.
-// const data = { title: 'bingbong', priority: 'extreme!!' };
