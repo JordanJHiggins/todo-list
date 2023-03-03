@@ -32,12 +32,13 @@ export default class Controller {
     // app.view.initEditTaskInput(tabbedProject);
     app.view.initDeleteTaskButton(tabbedProject);
     app.view.initDeleteProjectButton(tabbedProject.id);
+    // app.view.initCancelEditButton();
   };
 
   handleAddTask = (projectID, title, desc, dueDate, priority) => {
     const newTask = new Task(title, desc, dueDate, priority);
 
-    const currentProject = this.findProject(projectID);
+    const currentProject = app.todoList.findProject(projectID);
     currentProject.addTask(newTask);
 
     app.view.renderNewTask(newTask);
@@ -99,7 +100,7 @@ export default class Controller {
   };
 
   handleSaveTaskUpdates(currentProject, currentTask) {
-    app.view.clearTaskList(currentTask);
+    app.view.clearTask(currentTask);
     app.view.renderTasks(currentProject);
   }
 

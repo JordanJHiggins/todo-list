@@ -10,6 +10,7 @@ export default class View {
     // Root element, grid container
     this.root = this.getElement('#grid-wrapper');
 
+    this.header = this.createElement('div', 'main-header');
     this.title = this.createElement('h1');
     this.title.textContent = 'todoooo';
 
@@ -19,10 +20,21 @@ export default class View {
     // Side bar, project list displayed here
     this.sideBar = this.createElement('div', 'side-bar');
 
+    this.projectList = this.createElement('div', 'project-list');
+    this.projectList.textContent = 'Projects ';
+
+    this.addProjectTitle = this.createElement('h4', 'add-project-title');
+    this.addProjectTitle.textContent = 'Project Name';
+
     this.addProjectModal = this.createElement('div', 'add-project-modal');
     this.addProjectModal.style.display = 'none';
 
     // Add project button and input, located in sidebar
+    this.addProjectContainer = this.createElement(
+      'div',
+      'add-project-container'
+    );
+
     this.addProjectButton = this.createElement('button', 'add-project-button');
     this.addProjectButton.textContent = 'Add Project ';
 
@@ -33,11 +45,21 @@ export default class View {
     this.projectSubmit.textContent = 'Add';
 
     // Append project input and buttons to sidebar
-    this.addProjectModal.append(this.addProjectInput, this.projectSubmit);
+    this.addProjectModal.append(
+      this.addProjectTitle,
+      this.addProjectInput,
+      this.projectSubmit
+    );
 
-    this.sideBar.append(this.addProjectButton, this.addProjectModal);
+    this.addProjectContainer.append(this.addProjectButton);
+
+    this.sideBar.append(
+      this.addProjectContainer,
+      this.addProjectModal,
+      this.projectList
+    );
     // Append sidebar and main content to grid-wrapper
-    this.root.append(this.sideBar, this.mainContent);
+    this.root.append(this.header, this.sideBar, this.mainContent);
   }
 
   // Helpers --------------------------------------------
@@ -67,7 +89,7 @@ export default class View {
     const addProjectModal = document.querySelector('.add-project-modal');
 
     if (addProjectModal.style.display === 'none') {
-      addProjectModal.style.display = 'block';
+      addProjectModal.style.display = 'flex';
     } else {
       addProjectModal.style.display = 'none';
     }
@@ -104,11 +126,18 @@ export default class View {
     }
   }
 
-  clearTaskList(el) {
+  // Should be named deleteTask.
+  clearTask(el) {
     if (el.classList.contains('clear-task')) {
       // Selects outer most parent of save button (task-card)
       el.parentElement.parentElement.parentElement.remove();
     }
+  }
+
+  clearTaskList() {
+    const tasks = document.querySelectorAll('.task-card');
+
+    tasks.forEach((task) => task.remove());
   }
 
   deleteTaskCard() {
@@ -232,6 +261,7 @@ export default class View {
       this.initEditTaskButton();
       this.initEditTaskInput(project);
       this.initDeleteTaskButton(project);
+      this.initCancelEditButton();
     });
   }
 
@@ -278,11 +308,17 @@ export default class View {
   }
 
   renderProjectTab(projectID) {
+    const projectTabContainer = this.createElement(
+      'div',
+      'project-tab-container'
+    );
+
     const projectTabButton = this.createElement('button', 'project-tab-button');
     projectTabButton.textContent = this.getProjectTitleValue();
     projectTabButton.id = projectID;
 
-    this.sideBar.appendChild(projectTabButton);
+    projectTabContainer.append(projectTabButton);
+    this.projectList.appendChild(projectTabContainer);
   }
 
   // Form when adding a new task
@@ -378,6 +414,7 @@ export default class View {
       const taskID = e.target.parentNode.id;
       const updatedValue = e.target.value;
       const property = e.target;
+
       this.initSaveButton(currentProject);
       app.handleEditTask(currentProject, taskID, updatedValue, property);
     });
@@ -449,9 +486,10 @@ export default class View {
       if (e.target.classList.contains('delete-project-button')) {
         const deletedProject = e.target.parentNode;
         deletedProject.remove();
-        //
+        this.clearTaskList();
+
         this.deleteProjectSelector(deletedProject.id);
-        this.handleDeleteProject(projectID);
+        // app.handleDeleteProject(projectID);
       }
     });
   }
