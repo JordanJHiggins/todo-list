@@ -124,7 +124,7 @@ export default class View {
     const editTaskContainer = task.querySelector('.edit-task-container');
 
     if (editTaskContainer.style.display === 'none') {
-      editTaskContainer.style.display = 'block';
+      editTaskContainer.style.display = '';
     } else {
       editTaskContainer.style.display = 'none';
     }
@@ -341,7 +341,7 @@ export default class View {
     const addTaskContainer = this.createElement('div', 'add-task-container');
     addTaskContainer.style.display = 'none';
     addTaskContainer.innerHTML = `
-    <form method='dialog' id='task-form'>
+    <form id='task-form'>
     <div class="title-container">
        <label for='title'>Title</label><br>
        <input type='text' id='title-input'><br>
@@ -377,13 +377,18 @@ export default class View {
     editTaskContainer.innerHTML = `
     <form class='edit-task-form' id='${task.id}'>
        <label for='title'>Title</label><br>
-       <input type='text' class="updated-task-title" id="updated-title" value=${taskTitle}><br>
+       <input type='text' class='updated-task-title' id="updated-title" value=${taskTitle}><br>
        <label for='desc'>Description</label><br>
-       <input type='text' class='updated-task-desc' id="desc-input" value='${taskDesc}'><br>
+       <input type='text' class='updated-task-desc' value='${taskDesc}'><br>
        <label for='due-date'>Due Date</label><br>
-       <input type='date' id='date-input' value='${taskDueDate}'><br>
+       <input type='date' class="updated-task-date" value='${taskDueDate}'><br>
        <label for='priority'> Priority</label><br>
-       <input type='text' id='priority-input' value='${taskPriority}'><br>
+       <select name="priority" class='updated-task-priority'>
+       <option value="low">Low</option> 
+       <option value="medium">Medium</option> 
+       <option value="high">High</option>
+       <option value="Urgent">Urgent</option> 
+       </select>
        <button type="button" class='save-updates'>save</button>
       <button type="button" class='cancel-edit-button'>Cancel</button>
       </form>
@@ -432,7 +437,11 @@ export default class View {
   initSubmitTaskButton() {
     const submitTaskButton = document.querySelector('.submit-task-button');
 
-    submitTaskButton.addEventListener('click', this.submitNewTask);
+    submitTaskButton.addEventListener('click', (e) => {
+      e.preventDefault();
+      this.submitNewTask();
+      this.toggleTaskInput();
+    });
   }
 
   initEditTaskInput(currentProject) {

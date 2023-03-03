@@ -62,7 +62,7 @@ export default class Controller {
       this.handleEditTaskTitle(currentProject, taskID, updatedValue);
     } else if (property.classList.contains('updated-task-desc')) {
       this.handleEditDesc(currentProject, taskID, updatedValue);
-    } else if (property.classList.contains('date-input')) {
+    } else if (property.classList.contains('updated-task-date')) {
       this.handleEditDueDate(currentProject, taskID, updatedValue);
     } else if (property.classList.contains('updated-task-priority')) {
       this.handleEditPriority(currentProject, taskID, updatedValue);
