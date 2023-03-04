@@ -124,7 +124,7 @@ export default class View {
     const editTaskContainer = task.querySelector('.edit-task-container');
 
     if (editTaskContainer.style.display === 'none') {
-      editTaskContainer.style.display = '';
+      editTaskContainer.style.display = 'block';
     } else {
       editTaskContainer.style.display = 'none';
     }
@@ -273,10 +273,12 @@ export default class View {
       const taskCard = this.createTaskCard(task);
       taskContainer.append(taskCard);
       // Create a method that calls and returns these methods?
-      this.initEditTaskButton();
+      // this.initEditTaskButton();
       this.initEditTaskInput(project);
       this.initDeleteTaskButton(project);
       this.initCancelEditButton();
+      this.initSaveButton();
+      this.initEditTaskButton();
     });
   }
 
@@ -287,30 +289,36 @@ export default class View {
 
     const title = this.createElement('p', 'task-card-title');
     title.textContent = task.title;
-    taskCard.append(title);
+    // taskCard.append(title);
 
     const desc = this.createElement('p', 'task-card-desc');
     desc.textContent = task.desc;
-    taskCard.append(desc);
+    // taskCard.append(desc);
 
-    const date = this.createElement('input', 'task-card-date');
-    date.type = 'date';
-    date.value = task.dueDate;
-    taskCard.append(date);
+    const date = this.createElement('p', 'task-card-date');
+    // taskCard.append(date);
+
+    const dateString = new Date(task.dueDate);
+    date.append(dateString.toLocaleDateString('en-US'));
 
     const priority = this.createElement('p', 'task-card-priority');
     priority.textContent = task.priority;
-    taskCard.append(priority);
+    // taskCard.append(priority);
 
     const deleteButton = this.createElement('button', 'delete-task-button');
     deleteButton.textContent = 'X';
-    taskCard.append(deleteButton);
+    // taskCard.append(deleteButton);
 
     const editButton = this.createElement('button', 'edit-task-button');
     editButton.textContent = 'Edit';
     editButton.id = task.id;
-    taskCard.append(editButton);
+    // taskCard.append(editButton);
 
+    const taskCardButtons = this.createElement('div', 'task-card-buttons');
+    taskCardButtons.append(editButton, deleteButton);
+
+    taskCard.append(title, desc, date, priority, taskCardButtons);
+    this.initEditTaskButton();
     this.renderEditTaskInput(
       taskCard,
       task.title,
@@ -368,6 +376,7 @@ export default class View {
 
     project.append(addTaskContainer);
     this.initSubmitTaskButton();
+    // this.initSaveButton(project);
   }
   // Form when editing a task
   renderEditTaskInput(task, taskTitle, taskDesc, taskDueDate, taskPriority) {
@@ -393,7 +402,6 @@ export default class View {
       <button type="button" class='cancel-edit-button'>Cancel</button>
       </form>
     `;
-
     task.append(editTaskContainer);
   }
 
@@ -445,16 +453,19 @@ export default class View {
   }
 
   initEditTaskInput(currentProject) {
-    const editTaskForm = document.querySelector('.edit-task-form');
+    const editTaskForm = document.querySelectorAll('.edit-task-form');
 
-    editTaskForm.addEventListener('input', (e) => {
-      const taskID = e.target.parentNode.id;
-      const updatedValue = e.target.value;
-      const property = e.target;
+    editTaskForm.forEach((form) =>
+      form.addEventListener('input', (e) => {
+        const taskID = e.target.parentNode.id;
+        const updatedValue = e.target.value;
+        const property = e.target;
 
-      this.initSaveButton(currentProject);
-      app.handleEditTask(currentProject, taskID, updatedValue, property);
-    });
+        this.initSaveButton(currentProject);
+        this.initEditTaskInput(currentProject);
+        app.handleEditTask(currentProject, taskID, updatedValue, property);
+      })
+    );
   }
 
   initEditTaskButton() {
@@ -462,8 +473,10 @@ export default class View {
 
     taskCards.forEach((taskcard) =>
       taskcard.addEventListener('click', (e) => {
+        console.log('click');
+        console.log(e.target);
         if (e.target.classList.contains('edit-task-button')) {
-          const taskID = e.target.parentNode.id;
+          const taskID = e.target.parentNode.parentNode.id;
           const currentTask = document.getElementById(taskID);
 
           app.handleOpenEditTaskForm(currentTask);
@@ -488,16 +501,18 @@ export default class View {
 
   // Gets called in controller, handleEditTask. currentProject passed there.
   initSaveButton(currentProject) {
-    const saveButton = document.querySelector('.save-updates');
+    const saveButton = document.querySelectorAll('.save-updates');
 
-    saveButton.addEventListener('click', (e) => {
-      e.preventDefault();
-      const currentTask = e.target;
+    saveButton.forEach((button) =>
+      button.addEventListener('click', (e) => {
+        e.preventDefault();
+        const currentTask = e.target;
 
-      e.target.classList.add('clear-task');
+        e.target.classList.add('clear-task');
 
-      app.handleSaveTaskUpdates(currentProject, currentTask);
-    });
+        app.handleSaveTaskUpdates(currentProject, currentTask);
+      })
+    );
   }
 
   initDeleteTaskButton(currentProject) {
@@ -505,7 +520,7 @@ export default class View {
 
     deleteTaskButton.forEach((button) => {
       button.addEventListener('click', (e) => {
-        const taskID = e.target.parentNode.id;
+        const taskID = e.target.parentNode.parentNode.id;
         const deletedTask = document.getElementById(taskID);
 
         // Select taskCard without relying on dom structure?
