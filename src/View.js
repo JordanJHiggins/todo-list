@@ -96,7 +96,9 @@ export default class View {
   }
 
   clearProjectInput() {
-    this.addProjectInput = '';
+    let projectInput = document.querySelector('.add-project-input');
+
+    projectInput.value = '';
   }
 
   //  Toggle a class of hide on these method with "classList.toggle()"?
@@ -186,7 +188,11 @@ export default class View {
   submitNewProject() {
     const projectTitle = document.querySelector('.add-project-input').value;
 
-    app.handleAddProject(projectTitle);
+    if (projectTitle != '') {
+      app.handleAddProject(projectTitle);
+    } else {
+      alert('Project name can not be empty.');
+    }
   }
 
   submitNewTask() {
@@ -352,15 +358,15 @@ export default class View {
     <form id='task-form'>
     <div class="title-container">
        <label for='title'>Title</label><br>
-       <input type='text' id='title-input'><br>
+       <input name='title' type='text' id='title-input' required /><br>
     </div>
     <div class="desc-container">
        <label for="desc">Description</label><br>
-       <input type='text' id='desc-input'><br>
+       <input type='text' id='desc-input'/><br>
     </div>
     <div class="date-container">
        <label for='due-date'>Due Date</label><br>
-       <input type='date' id='date-input'><br>
+       <input type='date' id='date-input'/><br>
     </div>
     <div class="priority-container">
        <label for='priority'> Priority</><br>
@@ -552,7 +558,6 @@ export default class View {
     );
 
     cancelProjectInputButton.addEventListener('click', () => {
-      console.log('bing');
       this.toggleProjectModal();
       this.clearProjectInput();
     });

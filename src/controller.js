@@ -38,18 +38,24 @@ export default class Controller {
   handleAddTask = (projectID, title, desc, dueDate, priority) => {
     const newTask = new Task(title, desc, dueDate, priority);
 
-    const currentProject = app.todoList.findProject(projectID);
-    currentProject.addTask(newTask);
+    if (title != '') {
+      const currentProject = app.todoList.findProject(projectID);
+      currentProject.addTask(newTask);
 
-    app.view.renderNewTask(newTask);
-    app.view.initEditTaskInput(currentProject);
-    app.view.initDeleteTaskButton(currentProject);
-    app.view.initEditTaskButton();
-    app.view.initCancelEditButton();
+      app.view.renderNewTask(newTask);
+      app.view.initEditTaskInput(currentProject);
+      app.view.initDeleteTaskButton(currentProject);
+      app.view.initEditTaskButton();
+      app.view.initCancelEditButton();
+      app.view.initSaveButton(currentProject);
+    } else {
+      alert('Title can not be empty.');
+    }
   };
 
   handleOpenEditTaskForm(currentTask) {
     // pass specific task to open edit input on
+    console.log(`current Task: ${currentTask}`);
     app.view.toggleEditTaskInput(currentTask);
   }
 
