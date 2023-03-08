@@ -358,7 +358,7 @@ export default class View {
     <form id='task-form'>
     <div class="title-container">
        <label for='title'>Title</label><br>
-       <input name='title' type='text' id='title-input' required /><br>
+       <input name='title' type='text' id='title-input' /><br>
     </div>
     <div class="desc-container">
        <label for="desc">Description</label><br>
@@ -391,21 +391,31 @@ export default class View {
     editTaskContainer.style.display = 'none';
     editTaskContainer.innerHTML = `
     <form class='edit-task-form' id='${task.id}'>
-       <label for='title'>Title</label><br>
-       <input type='text' class='updated-task-title' id="updated-title" value=${taskTitle}><br>
-       <label for='desc'>Description</label><br>
-       <input type='text' class='updated-task-desc' value='${taskDesc}'><br>
-       <label for='due-date'>Due Date</label><br>
-       <input type='date' class="updated-task-date" value='${taskDueDate}'><br>
-       <label for='priority'> Priority</label><br>
-       <select name="priority" class='updated-task-priority'>
-       <option value="low">Low</option> 
-       <option value="medium">Medium</option> 
-       <option value="high">High</option>
-       <option value="Urgent">Urgent</option> 
-       </select>
-       <button type="button" class='save-updates'>save</button>
-      <button type="button" class='cancel-edit-button'>Cancel</button>
+      <div class='edit-title-container'>
+        <label for='title'>Title</label><br>
+        <input type='text' class='updated-task-title' id="updated-title" value=${taskTitle}><br>
+       </div>
+       <div class='edit-desc-container'>
+        <label for='desc'>Description</label><br>
+        <input type='text' class='updated-task-desc' value='${taskDesc}'><br>
+       </div>
+       <div class='edit-date-container'>
+        <label for='due-date'>Due Date</label><br>
+        <input type='date' class="updated-task-date" value='${taskDueDate}'><br>
+       </div>
+       <div class='edit-priority-container'>
+        <label for='priority'> Priority</label><br>
+        <select name="priority" class='updated-task-priority'>
+        <option value="low">Low</option> 
+        <option value="medium">Medium</option> 
+        <option value="high">High</option>
+        <option value="Urgent">Urgent</option> 
+        </select>
+       </div>
+        <div class='edit-task-buttons'>
+          <button type="button" class='save-updates'>save</button>
+          <button type="button" class='cancel-edit-button'>Cancel</button>
+        </div>
       </form>
     `;
     task.append(editTaskContainer);
