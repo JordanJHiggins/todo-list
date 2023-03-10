@@ -7,10 +7,6 @@ export default class TodoList {
     this.activeProject = '';
   }
 
-  getTodoList() {
-    return this.projects;
-  }
-
   addProject(project) {
     this.projects.push(project);
   }
@@ -32,7 +28,6 @@ export default class TodoList {
   findProject(projectTitle) {
     const foundObject = this.projects.find((obj) => obj.id === projectTitle);
 
-    console.log(foundObject);
     return foundObject;
   }
 

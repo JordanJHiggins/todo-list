@@ -3,16 +3,21 @@ import Task from './task';
 import Project from './project';
 import Controller from './controller';
 import { app } from './index';
-import { isThisQuarter } from 'date-fns';
+import AddImg from './assets/plus.svg';
+import Logo from './assets/logo.svg';
 
 export default class View {
   constructor() {
     // Root element, grid container
     this.root = this.getElement('#grid-wrapper');
 
+    const logo = this.createElement('img', 'logo-img');
+    logo.src = Logo;
+
     this.header = this.createElement('div', 'main-header');
     this.title = this.createElement('h1');
     this.title.textContent = 'todoooo';
+    this.header.appendChild(logo);
 
     // Main content area, projects displayed here
     this.mainContent = this.createElement('div', 'main-content');
@@ -28,15 +33,17 @@ export default class View {
 
     this.addProjectModal = this.createElement('div', 'add-project-modal');
     this.addProjectModal.style.display = 'none';
-
-    // Add project button and input, located in sidebar
     this.addProjectContainer = this.createElement(
       'div',
       'add-project-container'
     );
 
+    const addImg = this.createElement('img', 'add-project-img');
+    addImg.src = AddImg;
+
     this.addProjectButton = this.createElement('button', 'add-project-button');
-    this.addProjectButton.textContent = 'Add Project ';
+    this.addProjectButton.textContent = 'Add Project';
+    this.addProjectButton.appendChild(addImg);
 
     this.addProjectInput = this.createElement('input', 'add-project-input');
 
@@ -59,7 +66,7 @@ export default class View {
       this.projectSubmit,
       this.cancelProjectInput
     );
-    // Append project input and buttons to sidebar
+
     this.addProjectModal.append(
       this.addProjectTitle,
       this.addProjectInput,
@@ -73,11 +80,11 @@ export default class View {
       this.addProjectModal,
       this.projectList
     );
-    // Append sidebar and main content to grid-wrapper
+
     this.root.append(this.header, this.sideBar, this.mainContent);
   }
 
-  // Helpers --------------------------------------------
+  // Helpers
   createElement(tag, className) {
     const element = document.createElement(tag);
     if (className) element.classList.add(className);
@@ -136,17 +143,15 @@ export default class View {
     modal.style.display = 'none';
   }
 
-  // Takes an html element as parameter
+  // Takes an html element as arguement
   clearProjectView(content) {
     while (content.hasChildNodes()) {
       content.removeChild(content.firstChild);
     }
   }
 
-  // Should be named deleteTask.
   clearTask(el) {
     if (el.classList.contains('clear-task')) {
-      // Selects outer most parent of save button (task-card)
       el.parentElement.parentElement.parentElement.remove();
     }
   }
@@ -169,9 +174,7 @@ export default class View {
     }
   }
 
-  // Removes a project-view from dom
   deleteProjectCard(currentProject) {
-    console.log(currentProject);
     const deletedProjectCard = document.getElementById(currentProject);
 
     deletedProjectCard.parentNode.remove();
@@ -184,7 +187,6 @@ export default class View {
     taskCard.append(datePicker);
   }
 
-  // Talk to controller / pass data to handlers  ------------------------------
   submitNewProject() {
     const projectTitle = document.querySelector('.add-project-input').value;
 
@@ -221,7 +223,7 @@ export default class View {
     app.handleChangeProjectTab(projectID);
   }
 
-  // Render elements ---------------------------------------
+  // Render elements
   renderProjectView(title, projectID) {
     const projectView = this.createElement('div', 'project-view-container');
 
@@ -233,6 +235,7 @@ export default class View {
     addTaskButton.textContent = 'Add Task';
 
     projectView.append(projectTitle, addTaskButton);
+
     this.mainContent.append(projectView);
 
     this.initProjectTabButton();
@@ -242,6 +245,8 @@ export default class View {
   renderTabbedProjectView(title, projectID) {
     const projectView = this.createElement('div', 'project-view-container');
     projectView.id = projectID;
+
+    const projectHeader = this.createElement('div', 'project-header');
 
     const projectTitle = this.createElement('h2', 'project-title');
     projectTitle.textContent = title;
@@ -256,10 +261,16 @@ export default class View {
     );
     deleteProjectButton.textContent = 'Delete Project';
 
+    const projectButtons = this.createElement('div', 'project-buttons');
+    projectButtons.append(addTaskButton, deleteProjectButton);
+
     const taskContainer = this.createElement('div', 'task-container');
     taskContainer.id = projectID;
 
-    projectView.append(projectTitle, addTaskButton, deleteProjectButton);
+    projectHeader.append(projectTitle, projectButtons);
+
+    projectView.append(projectHeader);
+
     this.mainContent.append(projectView, taskContainer);
 
     this.renderTaskInput(projectView);
@@ -271,15 +282,13 @@ export default class View {
     document.querySelector('.task-container').append(taskCard);
   }
 
-  // Renders all tasks in a project and appends them to the task container
   renderTasks(project) {
     const taskContainer = document.querySelector('.task-container');
     taskContainer.innerHTML = '';
     project.tasks.forEach((task) => {
       const taskCard = this.createTaskCard(task);
       taskContainer.append(taskCard);
-      // Create a method that calls and returns these methods?
-      // this.initEditTaskButton();
+
       this.initEditTaskInput(project);
       this.initDeleteTaskButton(project);
       this.initCancelEditButton();
@@ -288,37 +297,30 @@ export default class View {
     });
   }
 
-  // Creates a new task card element with the given task dataa
   createTaskCard(task) {
     const taskCard = this.createElement('div', 'task-card');
     taskCard.id = task.id;
 
     const title = this.createElement('p', 'task-card-title');
     title.textContent = task.title;
-    // taskCard.append(title);
 
     const desc = this.createElement('p', 'task-card-desc');
     desc.textContent = task.desc;
-    // taskCard.append(desc);
 
     const date = this.createElement('p', 'task-card-date');
-    // taskCard.append(date);
 
     const dateString = new Date(task.dueDate);
     date.append(dateString.toLocaleDateString('en-US'));
 
     const priority = this.createElement('p', 'task-card-priority');
     priority.textContent = task.priority;
-    // taskCard.append(priority);
 
     const deleteButton = this.createElement('button', 'delete-task-button');
     deleteButton.textContent = 'X';
-    // taskCard.append(deleteButton);
 
     const editButton = this.createElement('button', 'edit-task-button');
     editButton.textContent = 'Edit';
     editButton.id = task.id;
-    // taskCard.append(editButton);
 
     const taskCardButtons = this.createElement('div', 'task-card-buttons');
     taskCardButtons.append(editButton, deleteButton);
@@ -347,6 +349,7 @@ export default class View {
     projectTabButton.id = projectID;
 
     projectTabContainer.append(projectTabButton);
+
     this.projectList.appendChild(projectTabContainer);
   }
 
@@ -356,25 +359,25 @@ export default class View {
     addTaskContainer.style.display = 'none';
     addTaskContainer.innerHTML = `
     <form id='task-form'>
-    <div class="title-container">
+    <div class='title-container'>
        <label for='title'>Title</label><br>
        <input name='title' type='text' id='title-input' /><br>
     </div>
-    <div class="desc-container">
+    <div class='desc-container'>
        <label for="desc">Description</label><br>
        <input type='text' id='desc-input'/><br>
     </div>
-    <div class="date-container">
+    <div class='date-container'>
        <label for='due-date'>Due Date</label><br>
        <input type='date' id='date-input'/><br>
     </div>
-    <div class="priority-container">
+    <div class='priority-container'>
        <label for='priority'> Priority</><br>
-       <select name="priority" id='priority-input'>
-       <option value="low">Low</option> 
-       <option value="medium">Medium</option> 
-       <option value="high">High</option>
-       <option value="Urgent">Urgent</option> 
+       <select name='priority' id='priority-input'>
+       <option value='low'>Low</option> 
+       <option value='medium'>Medium</option> 
+       <option value='high'>High</option>
+       <option value='Urgent'>Urgent</option> 
        </select>
     </div>
        <button class='submit-task-button' type='submit'>Submit</button>
@@ -382,8 +385,8 @@ export default class View {
 
     project.append(addTaskContainer);
     this.initSubmitTaskButton();
-    // this.initSaveButton(project);
   }
+
   // Form when editing a task
   renderEditTaskInput(task, taskTitle, taskDesc, taskDueDate, taskPriority) {
     const editTaskContainer = this.createElement('div', 'edit-task-container');
@@ -393,7 +396,7 @@ export default class View {
     <form class='edit-task-form' id='${task.id}'>
       <div class='edit-title-container'>
         <label for='title'>Title</label><br>
-        <input type='text' class='updated-task-title' id="updated-title" value=${taskTitle}><br>
+        <input type='text' class='updated-task-title' id='updated-title' value=${taskTitle}><br>
        </div>
        <div class='edit-desc-container'>
         <label for='desc'>Description</label><br>
@@ -406,10 +409,10 @@ export default class View {
        <div class='edit-priority-container'>
         <label for='priority'> Priority</label><br>
         <select name="priority" class='updated-task-priority'>
-        <option value="low">Low</option> 
-        <option value="medium">Medium</option> 
-        <option value="high">High</option>
-        <option value="Urgent">Urgent</option> 
+        <option value='low'>Low</option> 
+        <option value='medium'>Medium</option> 
+        <option value='high'>High</option>
+        <option value='Urgent'>Urgent</option> 
         </select>
        </div>
         <div class='edit-task-buttons'>
@@ -421,8 +424,7 @@ export default class View {
     task.append(editTaskContainer);
   }
 
-  // Event listeners -----------------------------------
-  // Refactor: Listeners should be using event delegation rather than querying individual elements.
+  // Event listeners
   initAddProjectButton() {
     const addProjectButton = document.querySelector('.add-project-button');
 
@@ -434,6 +436,7 @@ export default class View {
 
     submitProjectButton.addEventListener('click', (e) => {
       const projectModal = e.target.parentNode.parentNode;
+
       this.submitNewProject();
       this.closeAddProjectModal(projectModal);
     });
@@ -445,13 +448,12 @@ export default class View {
     projectTabButtons.forEach((button) =>
       button.addEventListener('click', (e) => {
         const buttonID = e.target.id;
-        console.log(buttonID);
+
         this.changeProjectTab(buttonID);
       })
     );
   }
 
-  // Shows task input in project
   initAddTaskButton(project) {
     const addTaskButton = document.querySelector('.add-task-button');
 
@@ -463,6 +465,7 @@ export default class View {
 
     submitTaskButton.addEventListener('click', (e) => {
       e.preventDefault();
+
       this.submitNewTask();
       this.toggleTaskInput();
     });
@@ -473,12 +476,13 @@ export default class View {
 
     editTaskForm.forEach((form) =>
       form.addEventListener('input', (e) => {
-        const taskID = e.target.parentNode.id;
+        const taskID = e.target.parentNode.parentNode.id;
         const updatedValue = e.target.value;
         const property = e.target;
 
         this.initSaveButton(currentProject);
         this.initEditTaskInput(currentProject);
+
         app.handleEditTask(currentProject, taskID, updatedValue, property);
       })
     );
@@ -507,21 +511,22 @@ export default class View {
     cancelEditTask.forEach((button) =>
       button.addEventListener('click', (e) => {
         e.preventDefault();
+
         const taskID = e.target.parentNode.parentNode.id;
         const currentTask = document.getElementById(taskID);
-        console.log(currentTask);
+
         app.handleCloseEditTaskForm(currentTask);
       })
     );
   }
 
-  // Gets called in controller, handleEditTask. currentProject passed there.
   initSaveButton(currentProject) {
     const saveButton = document.querySelectorAll('.save-updates');
 
     saveButton.forEach((button) =>
       button.addEventListener('click', (e) => {
         e.preventDefault();
+
         const currentTask = e.target;
 
         e.target.classList.add('clear-task');
@@ -539,7 +544,6 @@ export default class View {
         const taskID = e.target.parentNode.parentNode.id;
         const deletedTask = document.getElementById(taskID);
 
-        // Select taskCard without relying on dom structure?
         deletedTask.classList.add('delete-task');
 
         app.handleDeleteTask(deletedTask, taskID, currentProject);
@@ -552,12 +556,12 @@ export default class View {
 
     projectContainer.addEventListener('click', (e) => {
       if (e.target.classList.contains('delete-project-button')) {
-        const deletedProject = e.target.parentNode;
-        deletedProject.remove();
-        this.clearTaskList();
+        const deletedProject = e.target.parentNode.parentNode.parentNode;
 
+        deletedProject.remove();
+
+        this.clearTaskList();
         this.deleteProjectSelector(deletedProject.id);
-        // app.handleDeleteProject(projectID);
       }
     });
   }

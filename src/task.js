@@ -9,20 +9,4 @@ export default class Task {
     this.dueDate = dueDate;
     this.priority = priority;
   }
-
-  getTitle() {
-    return this.title;
-  }
-
-  getDesc() {
-    return this.desc;
-  }
-
-  getDueDate() {
-    return this.dueDate;
-  }
-
-  getPriority() {
-    return this.getPriority;
-  }
 }

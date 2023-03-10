@@ -5,18 +5,6 @@ export default class Project {
     this.tasks = [];
   }
 
-  getTitle() {
-    return this.title;
-  }
-
-  getTasksList() {
-    return this.tasks;
-  }
-
-  getID() {
-    return this.id;
-  }
-
   addTask(task) {
     this.tasks.push(task);
   }
@@ -25,6 +13,12 @@ export default class Project {
     const index = this.tasks.indexOf(task);
 
     this.tasks.splice(index, 1);
+  }
+
+  findTask(taskId) {
+    const foundTask = this.tasks.find((obj) => obj.id === taskId);
+
+    return foundTask;
   }
 
   updateTask(taskId, data) {

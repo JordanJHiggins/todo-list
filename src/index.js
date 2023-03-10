@@ -8,11 +8,7 @@ import './style.css';
 export const app = new Controller(new View(), new TodoList());
 
 window.addEventListener('DOMContentLoaded', (event) => {
-  console.log('DOM fully loaded and parsed');
-
   // App is instance of Controller, takes in view and models
-
-  // LOGIC TESTING
   app.view.initAddProjectButton();
   app.view.initSubmitProjectButton();
   app.view.initCancelProjectInput();

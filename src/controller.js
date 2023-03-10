@@ -15,10 +15,8 @@ export default class Controller {
     const newProject = new Project(projectTitle);
 
     app.todoList.addProject(newProject);
-
     app.view.renderProjectTab(newProject.id, projectTitle);
     app.view.initProjectTabButton();
-    // app.view.initDeleteProjectButton(newProject);
   };
 
   // Rerender project view on selector click?
@@ -29,10 +27,8 @@ export default class Controller {
     app.view.renderTabbedProjectView(tabbedProject.title, tabbedProject.id);
     app.view.renderTasks(tabbedProject);
     app.view.initAddTaskButton();
-    // app.view.initEditTaskInput(tabbedProject);
     app.view.initDeleteTaskButton(tabbedProject);
     app.view.initDeleteProjectButton(tabbedProject.id);
-    // app.view.initCancelEditButton();
   };
 
   handleAddTask = (projectID, title, desc, dueDate, priority) => {
@@ -81,7 +77,6 @@ export default class Controller {
     currentProject.updateTask(currentTask.id, { title: updatedValue });
 
     app.view.initSaveButton(currentProject);
-    console.log(currentTask);
   };
 
   handleEditDesc = (currentProject, taskID, updatedValue) => {
