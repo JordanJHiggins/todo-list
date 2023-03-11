@@ -19,7 +19,6 @@ export default class Controller {
     app.view.initProjectTabButton();
   };
 
-  // Rerender project view on selector click?
   handleChangeProjectTab = (projectID) => {
     const tabbedProject = app.todoList.findProject(projectID);
 
@@ -109,6 +108,7 @@ export default class Controller {
     const taskObj = currentProject.findTask(taskId);
 
     currentProject.removeTask(taskObj);
+
     app.view.deleteTaskCard();
   }
 
