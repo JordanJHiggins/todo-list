@@ -8,10 +8,7 @@ This is a simple ToDo List App built with HTML, CSS, JavaScript, Webpack and fol
 
 - Add tasks to the ToDo List.
 - Edit tasks by clicking on them.
-- Mark tasks as completed by clicking on the checkbox.
 - Delete tasks by clicking on the delete button.
-- Filter tasks by their status (All, Active, Completed).
-- Clear completed tasks.
 
 ## MVC Pattern
 
