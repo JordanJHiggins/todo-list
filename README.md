@@ -20,3 +20,5 @@ The app follows the MVC pattern to keep the code organized and modular:
 
 ## Webpack
 Webpack is used to bundle and manage the app's assets and dependencies. The webpack.config.js file defines the entry point, output file, loaders, and plugins.
+
+Live Link: https://jordanjhiggins.github.io/todo-list/
